@@ -4,16 +4,18 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import axios from 'axios';
 import './seat.css';
 
 export default function App() {
+  let navigate = useNavigate();
+  let location = useLocation();
   let params = useParams();
   let invoice = parseInt(params.invoiceId, 10);
 
   const [seat, setSeat] = useState([]);
   const [seatAvailable, setSeatAvailable] = useState([]);
   const [seatReserved, setSeatReserved] = useState([]);
-
 
   /* {
         "id": 6,
@@ -26,48 +28,48 @@ export default function App() {
     } */
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   setIsLoading(true);
+    const fetchData = async () => {
+      // setIsLoading(true);
 
-    //   try {
-    //       const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + stabilimentoId);
+      try {
+          const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + invoice + '/lista_Posti');
 
-    //       setStabilimento(result.data);
-    //   } catch (error) {
-    //       console.log(error);
-    //       alert(error);
-    //   }
+          setSeat(result.data);
+          setSeatAvailable(result.data);
+      } catch (error) {
+          console.log(error);
+          alert(error);
+      }
       
-    //   setIsLoading(false);
-    // };
-
-    // fetchData();
-
-    const setData = () => {
-      setSeat([
-        { "id": 1 }, { "id": 2 }, { "id": 3 },
-        { "id": 4 }, { "id": 5 }, { "id": 6 },
-        { "id": 7 }, { "id": 8 }, { "id": 9 }
-      ]);
-      setSeatAvailable([
-        { "id": 4 }, { "id": 5 }, { "id": 6 },
-        { "id": 7 }, { "id": 8 }, { "id": 9 }
-      ]);
-      setSeatReserved([
-        { "id": 1 }, { "id": 2 }, { "id": 3 }
-      ]);
+      // setIsLoading(false);
     };
 
-    setData();
+    fetchData();
+
+    // const setData = () => {
+    //   setSeat([
+    //     { "id": 1 }, { "id": 2 }, { "id": 3 },
+    //     { "id": 4 }, { "id": 5 }, { "id": 6 },
+    //     { "id": 7 }, { "id": 8 }, { "id": 9 }
+    //   ]);
+    //   setSeatAvailable([
+    //     { "id": 1 }, { "id": 2 }, { "id": 3 },
+    //     { "id": 4 }, { "id": 5 }, { "id": 6 },
+    //     { "id": 7 }, { "id": 8 }, { "id": 9 }
+    //   ]);
+    //   setSeatReserved([]);
+    // };
+
+    // setData();
   }, [invoice]);
     
   const onClickData = (seat) => {
     if(seatReserved.findIndex((element) => element.id === seat.id) > -1 ) {
       setSeatAvailable(seatAvailable.concat(seat));
-      setSeatReserved(seatReserved.filter(res => res.id != seat.id));  
+      setSeatReserved(seatReserved.filter(res => res.id !== seat.id));  
     } else {
       setSeatReserved(seatReserved.concat(seat));
-      setSeatAvailable(seatAvailable.filter(res => res.id != seat.id));
+      setSeatAvailable(seatAvailable.filter(res => res.id !== seat.id));
     }
   };
 
@@ -79,7 +81,17 @@ export default function App() {
         available = { seatAvailable }
         reserved = { seatReserved }
         onClickData = { onClickData.bind(this) }
-        />
+      />
+      <p>
+        <button
+          onClick={() => {
+            // deleteInvoice(invoice.number);
+            navigate("/invoices" + location.search);
+          }}
+        >
+          Back
+        </button>
+      </p>
     </div>
   )
 }
@@ -115,7 +127,7 @@ function AvailableList({ available }) {
 
   return(
     <div className="left">
-      <h4>Available Seats: ({seatCount == 0? 'No seats available' : seatCount})</h4>
+      <h4>Available Seats: ({seatCount === 0? 'No seats available' : seatCount})</h4>
       <ul>
         { available.map( res => <li key={res.id} >{res.id}</li> ) }
       </ul>
