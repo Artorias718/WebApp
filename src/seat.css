@@ -6,8 +6,8 @@ h1 {
 }
 
 .container {
-  /* width: 1000px; */
-  width: 90%;
+  width: 900px;
+  /* width: 80%; */
   margin: auto;
 }
 
@@ -46,4 +46,14 @@ h1 {
 
 li {
   list-style: none;
+}
+
+.booked {
+  background: gray;
+  color: #fff;
+  display: inline-block;
+}
+
+.booked::after {
+  content: 'UNAVAILABLE'
 }

@@ -5,6 +5,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import axios from 'axios';
+// import 'bootstrap/dist/css/bootstrap.css';
 import './seat.css';
 
 export default function App() {
@@ -35,7 +36,7 @@ export default function App() {
           const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + invoice + '/lista_Posti');
 
           setSeat(result.data);
-          setSeatAvailable(result.data);
+          setSeatAvailable(result.data.filter(s => s.booked === false));
       } catch (error) {
           console.log(error);
           alert(error);
@@ -47,16 +48,13 @@ export default function App() {
     fetchData();
 
     // const setData = () => {
-    //   setSeat([
-    //     { "id": 1 }, { "id": 2 }, { "id": 3 },
-    //     { "id": 4 }, { "id": 5 }, { "id": 6 },
-    //     { "id": 7 }, { "id": 8 }, { "id": 9 }
-    //   ]);
-    //   setSeatAvailable([
-    //     { "id": 1 }, { "id": 2 }, { "id": 3 },
-    //     { "id": 4 }, { "id": 5 }, { "id": 6 },
-    //     { "id": 7 }, { "id": 8 }, { "id": 9 }
-    //   ]);
+    //   let seatList = [
+    //     { "id": 1, "booked": false }, { "id": 2, "booked": false }, { "id": 3, "booked": false },
+    //     { "id": 4, "booked": false }, { "id": 5, "booked": false }, { "id": 6, "booked": false },
+    //     { "id": 7, "booked": true }, { "id": 8, "booked": true }, { "id": 9, "booked": true }
+    //   ];
+    //   setSeat(seatList);
+    //   setSeatAvailable(seatList.filter(s => s.booked === false));
     //   setSeatReserved([]);
     // };
 
@@ -64,12 +62,17 @@ export default function App() {
   }, [invoice]);
     
   const onClickData = (seat) => {
-    if(seatReserved.findIndex((element) => element.id === seat.id) > -1 ) {
-      setSeatAvailable(seatAvailable.concat(seat));
-      setSeatReserved(seatReserved.filter(res => res.id !== seat.id));  
-    } else {
-      setSeatReserved(seatReserved.concat(seat));
-      setSeatAvailable(seatAvailable.filter(res => res.id !== seat.id));
+    if (seat.booked) {
+      alert('Posto: ' + seat.id + ' non disponibile!');
+    }
+    else {
+      if(seatReserved.findIndex((element) => element.id === seat.id) > -1 ) {
+        setSeatAvailable(seatAvailable.concat(seat));
+        setSeatReserved(seatReserved.filter(res => res.id !== seat.id));  
+      } else {
+        setSeatReserved(seatReserved.concat(seat));
+        setSeatAvailable(seatAvailable.filter(res => res.id !== seat.id));
+      }
     }
   };
 
@@ -82,8 +85,16 @@ export default function App() {
         reserved = { seatReserved }
         onClickData = { onClickData.bind(this) }
       />
-      <p>
-        <button
+      <p style={{ float: "right" }}>
+      <button style={{ margin: "1rem" }}
+          // onClick={() => {
+          //   // deleteInvoice(invoice.number);
+          //   navigate("/invoices" + location.search);
+          // }}
+        >
+          Conferma
+        </button>
+        <button style={{ margin: "1rem" }}
           onClick={() => {
             // deleteInvoice(invoice.number);
             navigate("/invoices" + location.search);
@@ -108,8 +119,21 @@ function DrawGrid({seat, available, reserved, onClickData}) {
         <tbody>
             <tr>
               { seat.map( row =>
-                <td 
-                  className={reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'}
+                <td
+                  className={
+                    row.booked ? 'booked' : 
+                      reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
+                    // () => {
+                    //   // return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
+                    //   if (row.booked) {
+                    //     return 'booked';
+                    //   }
+                    //   else {
+                    //     return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
+                    //   }
+                    // }
+                    // reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
+                  }
                   key={row.id} onClick = {e => onClickSeat(row)}>{row.id} </td>) }
             </tr>
         </tbody>
