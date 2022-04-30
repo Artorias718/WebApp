@@ -76,6 +76,26 @@ export default function App() {
     }
   };
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log('You clicked submit.');
+    console.log('stabilimentoID: ' + invoice);
+    console.log(seatReserved);
+    let reservedIds = seatReserved.map(s => s.id);
+    console.log(reservedIds);
+    
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce#sum_of_values_in_an_object_array
+    let initialValue = 0;
+    let totalPrice = seatReserved.reduce(
+      (previousValue, currentValue) => previousValue + currentValue.price,
+      initialValue
+    );
+
+    console.log(totalPrice);
+
+    // faccio la post con stabilimentoID, reservedSeatsId, totalPrice
+  }
+
   return (
     <div>
       <h1>Seat Reservation System</h1>
@@ -86,11 +106,13 @@ export default function App() {
         onClickData = { onClickData.bind(this) }
       />
       <p style={{ float: "right" }}>
-      <button style={{ margin: "1rem" }}
-          // onClick={() => {
-          //   // deleteInvoice(invoice.number);
-          //   navigate("/invoices" + location.search);
-          // }}
+      <button type='submit' style={{ margin: "1rem" }}
+          onClick={handleSubmit
+            // () => {
+            // deleteInvoice(invoice.number);
+            // navigate("/invoices" + location.search);
+            // }
+          }
         >
           Conferma
         </button>

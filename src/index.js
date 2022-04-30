@@ -1,4 +1,4 @@
-import { render } from "react-dom";
+import { createRoot } from 'react-dom/client';
 import {
   BrowserRouter,
   Routes,
@@ -9,10 +9,14 @@ import App from "./App";
 import Mappa from "./Mappa";
 import Expenses from "./routes/expenses";
 import Invoices from "./routes/invoices";
+import Stabilimenti from "./routes/stabilimenti"
 import Invoice from "./routes/invoice";
 
-const rootElement = document.getElementById("root");
-render(
+// const rootElement = document.getElementById("root");
+const container = document.getElementById('app');
+const root = createRoot(container); // createRoot(container!) if you use TypeScript
+// root.render(<App tab="home" />);
+root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
@@ -38,8 +42,7 @@ render(
         />
       </Route>
     </Routes>
-  </BrowserRouter>,
-  rootElement
+  </BrowserRouter>
 );
 
 /*import React from 'react';
@@ -62,3 +65,4 @@ reportWebVitals();*/
 
 
 // npm install react-router-dom@6
+// npm install react react-dom
