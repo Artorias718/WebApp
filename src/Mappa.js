@@ -61,6 +61,7 @@ export default function App() {
     // setData();
   }, [invoice]);
     
+  // metodo che permette di aggiornare i posti scelti dall'utente
   const onClickData = (seat) => {
     if (seat.booked) {
       alert('Posto: ' + seat.id + ' non disponibile!');
@@ -76,6 +77,7 @@ export default function App() {
     }
   };
 
+  // metodo handle per conferma/prenota
   function handleSubmit(e) {
     e.preventDefault();
     console.log('You clicked submit.');
@@ -94,6 +96,18 @@ export default function App() {
     console.log(totalPrice);
 
     // faccio la post con stabilimentoID, reservedSeatsId, totalPrice
+    axios.post('http://localhost:7500/api/v1/prenotazioni/create', {
+      "stabilimentoID": invoice,
+      "listaPostiPrenotati": reservedIds,
+      "totalPrice": totalPrice
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
   }
 
   return (
