@@ -8,9 +8,9 @@ import './index.css';
 import App from "./App";
 import Mappa from "./Mappa";
 import Expenses from "./routes/expenses";
-import Invoices from "./routes/invoices";
+// import Invoices from "./routes/invoices";
 import Stabilimenti from "./routes/stabilimenti"
-import Invoice from "./routes/invoice";
+// import Invoice from "./routes/invoice";
 
 // const rootElement = document.getElementById("root");
 const container = document.getElementById('app');
@@ -21,16 +21,16 @@ root.render(
     <Routes>
       <Route path="/" element={<App />}>
         <Route path="expenses" element={<Expenses />} />
-        <Route path="invoices" element={<Invoices />}>
+        <Route path="stabilimenti" element={<Stabilimenti />}>
           <Route
             index
             element={
               <main style={{ padding: "1rem" }}>
-                <p>Select an invoice</p>
+                <p>Select a stabilimento</p>
               </main>
             }
           />
-          <Route path=":invoiceId" element={<Mappa />} />
+          <Route path=":stabilimentoId" element={<Mappa />} />
         </Route>
         <Route
           path="*"

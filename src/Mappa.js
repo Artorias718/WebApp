@@ -12,7 +12,7 @@ export default function App() {
   let navigate = useNavigate();
   let location = useLocation();
   let params = useParams();
-  let invoice = parseInt(params.invoiceId, 10);
+  let stabilimentoID = parseInt(params.stabilimentoId, 10);
 
   const [seat, setSeat] = useState([]);
   const [seatAvailable, setSeatAvailable] = useState([]);
@@ -33,10 +33,11 @@ export default function App() {
       // setIsLoading(true);
 
       try {
-          const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + invoice + '/lista_Posti');
+          const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + stabilimentoID + '/lista_Posti');
 
           setSeat(result.data);
           setSeatAvailable(result.data.filter(s => s.booked === false));
+          setSeatReserved([]);
       } catch (error) {
           console.log(error);
           alert(error);
@@ -59,7 +60,7 @@ export default function App() {
     // };
 
     // setData();
-  }, [invoice]);
+  }, [stabilimentoID]);
     
   // metodo che permette di aggiornare i posti scelti dall'utente
   const onClickData = (seat) => {
@@ -81,7 +82,7 @@ export default function App() {
   function handleSubmit(e) {
     e.preventDefault();
     console.log('You clicked submit.');
-    console.log('stabilimentoID: ' + invoice);
+    console.log('stabilimentoID: ' + stabilimentoID);
     console.log(seatReserved);
     let reservedIds = seatReserved.map(s => s.id);
     console.log(reservedIds);
@@ -97,7 +98,7 @@ export default function App() {
 
     // faccio la post con stabilimentoID, reservedSeatsId, totalPrice
     axios.post('http://localhost:7500/api/v1/prenotazioni/create', {
-      "stabilimentoID": invoice,
+      "stabilimentoID": stabilimentoID,
       "listaPostiPrenotati": reservedIds,
       "totalPrice": totalPrice
     })
