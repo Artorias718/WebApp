@@ -12,7 +12,7 @@ export default function App() {
   let navigate = useNavigate();
   let location = useLocation();
   let params = useParams();
-  let stabilimentoID = parseInt(params.stabilimentoId, 10);
+  let stabilimentoId = parseInt(params.stabilimentoId, 10);
 
   const [seat, setSeat] = useState([]);
   const [seatAvailable, setSeatAvailable] = useState([]);
@@ -33,7 +33,7 @@ export default function App() {
       // setIsLoading(true);
 
       try {
-          const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + stabilimentoID + '/lista_Posti');
+          const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + stabilimentoId + '/lista_Posti');
 
           setSeat(result.data);
           setSeatAvailable(result.data.filter(s => s.booked === false));
@@ -60,7 +60,7 @@ export default function App() {
     // };
 
     // setData();
-  }, [stabilimentoID]);
+  }, [stabilimentoId]);
     
   // metodo che permette di aggiornare i posti scelti dall'utente
   const onClickData = (seat) => {
@@ -82,7 +82,7 @@ export default function App() {
   function handleSubmit(e) {
     e.preventDefault();
     console.log('You clicked submit.');
-    console.log('stabilimentoID: ' + stabilimentoID);
+    console.log('stabilimentoID: ' + stabilimentoId);
     console.log(seatReserved);
     let reservedIds = seatReserved.map(s => s.id);
     console.log(reservedIds);
@@ -96,23 +96,30 @@ export default function App() {
 
     console.log(totalPrice);
 
-    // faccio la post con stabilimentoID, reservedSeatsId, totalPrice
-    axios.post('http://localhost:7500/api/v1/prenotazioni/create', {
-      "stabilimentoID": stabilimentoID,
-      "listaPostiPrenotati": reservedIds,
-      "totalPrice": totalPrice
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    // qua sarebbe interessante un modal o una pagina a parte per il checkout
+    let msg = 'Conferma la prenoatazione dei posti: ' +
+      seatReserved.map(s => '\n\tPosto: ' + s.id + ' - prezzo: € ' + s.price) +
+      '\nPrezzo totale: €' + totalPrice;
+    if (window.confirm(msg)) {
+      // alert("exit.html", "Thanks for Visiting!");
+      // faccio la post con stabilimentoId, reservedSeatsId, totalPrice
+      axios.post('http://localhost:7500/api/v1/prenotazioni/create', {
+        "stabilimentoID": stabilimentoId,
+        "listaPostiPrenotati": reservedIds,
+        "totalPrice": totalPrice
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
 
   }
 
   return (
-    <div>
+    <main>
       <h1>Seat Reservation System</h1>
       <DrawGrid 
         seat = { seat }
@@ -134,13 +141,13 @@ export default function App() {
         <button style={{ margin: "1rem" }}
           onClick={() => {
             // deleteInvoice(invoice.number);
-            navigate("/invoices" + location.search);
+            navigate("/stabilimenti" + location.search);
           }}
         >
           Back
         </button>
       </p>
-    </div>
+    </main>
   )
 }
   
@@ -201,7 +208,7 @@ function ReservedList({ reserved }) {
     <div className="right">
       <h4>Reserved Seats: ({reserved.length})</h4>
       <ul>
-        { reserved.map(res => <li key={res.id} >{res.id}</li>) }
+        { reserved.map(res => <li key={res.id} >{res.id} - €: {res.price}</li>) }
       </ul>
     </div>
   )

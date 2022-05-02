@@ -11,7 +11,7 @@ export default function Invoices() {
   let [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex"}}>
       <nav
         style={{
           borderRight: "solid 1px",
