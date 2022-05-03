@@ -8,7 +8,7 @@ import axios from 'axios';
 // import 'bootstrap/dist/css/bootstrap.css';
 import './seat.css';
 
-export default function App() {
+export default function Mappa() {
   let navigate = useNavigate();
   let location = useLocation();
   let params = useParams();
@@ -97,7 +97,7 @@ export default function App() {
     console.log(totalPrice);
 
     // qua sarebbe interessante un modal o una pagina a parte per il checkout
-    let msg = 'Conferma la prenoatazione dei posti: ' +
+    let msg = 'Conferma la prenotazione dei posti: ' +
       seatReserved.map(s => '\n\tPosto: ' + s.id + ' - prezzo: € ' + s.price) +
       '\nPrezzo totale: €' + totalPrice;
     if (window.confirm(msg)) {

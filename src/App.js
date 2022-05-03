@@ -4,7 +4,7 @@ import './App.css';
 
 export default function App() {
   return (
-    <div>
+    <div className="container">
       <h1>Bookkeeper!</h1>
       <nav
         style={{

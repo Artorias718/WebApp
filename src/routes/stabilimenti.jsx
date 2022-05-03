@@ -6,6 +6,7 @@ import {
     useLocation
   } from "react-router-dom";
 import axios from 'axios';
+import '../styles/stabilimenti.css';
   
 export default function Stabilimenti() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -84,25 +85,26 @@ export default function Stabilimenti() {
       // setData();
     }, []);
 
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+
     return (
-      <div style={{ display: "flex" }}>
-        <nav
-          style={{
-            borderRight: "solid 1px",
-            padding: "1rem",
-          }}
-        >
-          <input
-            value={searchParams.get("filter") || ""}
-            onChange={(event) => {
-              let filter = event.target.value;
-              if (filter) {
-                setSearchParams({ filter });
-              } else {
-                setSearchParams({});
-              }
-            }}
-          />
+      <section>
+            <input
+              value={searchParams.get("filter") || ""}
+              onChange={(event) => {
+                let filter = event.target.value;
+                if (filter) {
+                  setSearchParams({ filter });
+                } else {
+                  setSearchParams({});
+                }
+              }}
+            />
+            
+        <div className='cards'>
+        <ul>
           {stabilimenti
             .filter((stabilimento) => {
               let filter = searchParams.get("filter");
@@ -111,21 +113,32 @@ export default function Stabilimenti() {
               return name.includes(filter.toLowerCase());
             })
             .map((stabilimento) => (
-              <QueryNavLink
-                style={({ isActive }) => ({
-                  display: "block",
-                  margin: "1rem 0",
-                  color: isActive ? "red" : "",
-                })}
-                to={`/stabilimenti/${stabilimento.id}`}
+              <div className='card'
                 key={stabilimento.id}
               >
-                {stabilimento.name}
-              </QueryNavLink>
+                <div className='img'><img src={require('../img/'+ stabilimento.id +'.jpg')} alt="beach image"/></div>
+                <div className='text'>
+                    <h2>
+                      <QueryNavLink
+                        style={({ isActive }) => ({
+                          display: "block",
+                          margin: "1rem 0",
+                          color: isActive ? "red" : "",
+                        })}
+                        to={`/stabilimenti/${stabilimento.id}`}
+                      >
+                        {stabilimento.name}
+                      </QueryNavLink>
+                    </h2>
+                    <p>Commodo ut laborum fugiat aliqua eiusmod voluptate pariatur.</p>
+                    <small>By Heydon Pickering</small>
+                </div>
+              </div>
             ))}
-        </nav>
+        </ul>
+        </div>
         <Outlet />
-      </div>
+      </section>
     );
   }
   

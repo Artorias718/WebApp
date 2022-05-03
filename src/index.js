@@ -23,14 +23,6 @@ root.render(
       <Route path="/" element={<App />}>
         <Route path="expenses" element={<Expenses />} />
         <Route path="stabilimenti" element={<Stabilimenti />}>
-          <Route
-            index
-            element={
-              <main style={{ padding: "1rem" }}>
-                <p>Select a stabilimento</p>
-              </main>
-            }
-          />
           <Route path=":stabilimentoId" element={<Mappa />} />
         </Route>
         <Route
