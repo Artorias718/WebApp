@@ -6,6 +6,9 @@ import {
     useLocation
   } from "react-router-dom";
 import axios from 'axios';
+import { Card, Button, Row, Stack } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import logo from '../logo.svg';
   
 export default function Stabilimenti() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -85,25 +88,24 @@ export default function Stabilimenti() {
     }, []);
 
     return (
-      <main>
-        <input
-          value={searchParams.get("filter") || ""}
-          onChange={(event) => {
-            let filter = event.target.value;
-            if (filter) {
-              setSearchParams({ filter });
-            } else {
-              setSearchParams({});
-            }
-          }}
-        />
-        <div style={{ display: "flex" }}>
-          <nav
-            style={{
-              borderRight: "solid 1px",
-              padding: "1rem",
+      <Container>
+        <Row>
+          <input
+            value={searchParams.get("filter") || ""}
+            onChange={(event) => {
+              let filter = event.target.value;
+              if (filter) {
+                setSearchParams({ filter });
+              } else {
+                setSearchParams({});
+              }
             }}
-          >
+          />
+        </Row>
+        
+        <Row>
+          <Stack direction="horizontal" gap={3}>
+          {/* <nav> */}
             {stabilimenti
               .filter((stabilimento) => {
                 let filter = searchParams.get("filter");
@@ -112,22 +114,75 @@ export default function Stabilimenti() {
                 return name.includes(filter.toLowerCase());
               })
               .map((stabilimento) => (
-                <QueryNavLink
-                  style={({ isActive }) => ({
-                    display: "block",
-                    margin: "1rem 0",
-                    color: isActive ? "red" : "",
-                  })}
-                  to={`/stabilimenti/${stabilimento.id}`}
-                  key={stabilimento.id}
-                >
-                  {stabilimento.name}
-                </QueryNavLink>
+                <div className="bg-light border">
+                <Card style={{ width: '18rem' }}>
+                  <Card.Img variant="top" src={logo} />
+                  <Card.Body>
+                    <Card.Title>Card Title</Card.Title>
+                    <Card.Text>
+                      Some quick example text to build on the card title and make up the bulk of
+                      the card's content.
+                    </Card.Text>
+                    <Button variant="primary">Go somewhere</Button>
+                    <QueryNavLink
+                      style={({ isActive }) => ({
+                        display: "block",
+                        margin: "1rem 0",
+                        color: isActive ? "red" : "",
+                      })}
+                      to={`/stabilimenti/${stabilimento.id}`}
+                      key={stabilimento.id}
+                    >
+                      {stabilimento.name}
+                    </QueryNavLink>
+                  </Card.Body>
+                </Card>
+              </div>
               ))}
-          </nav>
+          {/* </nav> */}
+            <div className="bg-light border">
+            
+            </div>
+            <div className="bg-light border">Second item</div>
+            <div className="bg-light border">Third item</div>
+          
+          </Stack>
+          {/* <nav>
+            {stabilimenti
+              .filter((stabilimento) => {
+                let filter = searchParams.get("filter");
+                if (!filter) return true;
+                let name = stabilimento.name.toLowerCase();
+                return name.includes(filter.toLowerCase());
+              })
+              .map((stabilimento) => (
+                <Card style={{ width: '18rem' }}>
+                  <Card.Img variant="top" src={logo} />
+                  <Card.Body>
+                    <Card.Title>Card Title</Card.Title>
+                    <Card.Text>
+                      Some quick example text to build on the card title and make up the bulk of
+                      the card's content.
+                    </Card.Text>
+                    <Button variant="primary">Go somewhere</Button>
+                    <QueryNavLink
+                      style={({ isActive }) => ({
+                        display: "block",
+                        margin: "1rem 0",
+                        color: isActive ? "red" : "",
+                      })}
+                      to={`/stabilimenti/${stabilimento.id}`}
+                      key={stabilimento.id}
+                    >
+                      {stabilimento.name}
+                    </QueryNavLink>
+                  </Card.Body>
+                </Card>
+              ))}
+          </nav> */}
           <Outlet />
-        </div>
-      </main>
+        </Row>
+      </Container>
     );
   }
   
