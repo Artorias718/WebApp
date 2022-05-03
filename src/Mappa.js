@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 // import 'bootstrap/dist/css/bootstrap.css';
-import './seat.css';
+import './mappa.css';
 
 export default function App() {
   let navigate = useNavigate();
@@ -178,7 +178,7 @@ function DrawGrid({seat, available, reserved, onClickData}) {
                     // }
                     // reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
                   }
-                  key={row.id} onClick = {e => onClickSeat(row)}>{row.id} </td>) }
+                  key={row.id} onClick = {e => onClickSeat(row)}><a href="#">{row.id}</a></td>) }
             </tr>
         </tbody>
       </table>

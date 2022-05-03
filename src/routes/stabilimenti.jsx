@@ -85,47 +85,49 @@ export default function Stabilimenti() {
     }, []);
 
     return (
-      <div style={{ display: "flex" }}>
-        <nav
-          style={{
-            borderRight: "solid 1px",
-            padding: "1rem",
+      <main>
+        <input
+          value={searchParams.get("filter") || ""}
+          onChange={(event) => {
+            let filter = event.target.value;
+            if (filter) {
+              setSearchParams({ filter });
+            } else {
+              setSearchParams({});
+            }
           }}
-        >
-          <input
-            value={searchParams.get("filter") || ""}
-            onChange={(event) => {
-              let filter = event.target.value;
-              if (filter) {
-                setSearchParams({ filter });
-              } else {
-                setSearchParams({});
-              }
+        />
+        <div style={{ display: "flex" }}>
+          <nav
+            style={{
+              borderRight: "solid 1px",
+              padding: "1rem",
             }}
-          />
-          {stabilimenti
-            .filter((stabilimento) => {
-              let filter = searchParams.get("filter");
-              if (!filter) return true;
-              let name = stabilimento.name.toLowerCase();
-              return name.includes(filter.toLowerCase());
-            })
-            .map((stabilimento) => (
-              <QueryNavLink
-                style={({ isActive }) => ({
-                  display: "block",
-                  margin: "1rem 0",
-                  color: isActive ? "red" : "",
-                })}
-                to={`/stabilimenti/${stabilimento.id}`}
-                key={stabilimento.id}
-              >
-                {stabilimento.name}
-              </QueryNavLink>
-            ))}
-        </nav>
-        <Outlet />
-      </div>
+          >
+            {stabilimenti
+              .filter((stabilimento) => {
+                let filter = searchParams.get("filter");
+                if (!filter) return true;
+                let name = stabilimento.name.toLowerCase();
+                return name.includes(filter.toLowerCase());
+              })
+              .map((stabilimento) => (
+                <QueryNavLink
+                  style={({ isActive }) => ({
+                    display: "block",
+                    margin: "1rem 0",
+                    color: isActive ? "red" : "",
+                  })}
+                  to={`/stabilimenti/${stabilimento.id}`}
+                  key={stabilimento.id}
+                >
+                  {stabilimento.name}
+                </QueryNavLink>
+              ))}
+          </nav>
+          <Outlet />
+        </div>
+      </main>
     );
   }
   
