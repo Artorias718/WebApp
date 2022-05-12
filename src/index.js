@@ -4,13 +4,15 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-// import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import './css/styles.css';
 import './index.css';
 import App from "./App";
 import Mappa from "./Mappa";
 import Expenses from "./routes/expenses";
 // import Invoices from "./routes/invoices";
 import Stabilimenti from "./routes/stabilimenti"
+import StabilimentiList from "./routes/StabilimentiList"
 // import Invoice from "./routes/invoice";
 
 // const rootElement = document.getElementById("root");
@@ -24,6 +26,7 @@ root.render(
         <Route path="expenses" element={<Expenses />} />
         <Route path="stabilimenti" element={<Stabilimenti />}>
           <Route path=":stabilimentoId" element={<Mappa />} />
+          <Route index element={<StabilimentiList />} />
         </Route>
         <Route
           path="*"
@@ -59,3 +62,4 @@ reportWebVitals();*/
 
 // npm install react-router-dom@6
 // npm install react react-dom
+// npm install react-bootstrap bootstrap
