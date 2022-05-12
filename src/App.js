@@ -4,30 +4,28 @@ import './App.css';
 
 export default function App() {
   return (
-    <>
+    <div>
       {/* <h1>Seabook!</h1> */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-light"
-        // style={{
-        //   borderBottom: "solid 1px",
-        //   paddingBottom: "1rem",
-        // }}
-      >
-      <div className="container px-4 px-lg-5">
-        <Link className="navbar-brand" to="/">Seabook</Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"></span></button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li className="nav-item"><Link className="nav-link active" to="/">Home</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="/stabilimenti">Stabilimenti</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="/expenses">Expenses</Link></li>
-            </ul>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container px-4 px-lg-5">
+          <Link className="navbar-brand" to="/">Seabook</Link>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"></span></button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                  <li className="nav-item"><Link className="nav-link active" to="/">Home</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/stabilimenti">Stabilimenti</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/expenses">Expenses</Link></li>
+              </ul>
+          </div>
+          {/* <Link to="/stabilimenti">Stabilimenti</Link>
+          <Link to="/expenses">Expenses</Link> */}
         </div>
-        {/* <Link to="/stabilimenti">Stabilimenti</Link>
-        <Link to="/expenses">Expenses</Link> */}
-      </div>
       </nav>
       <Outlet />
-    </>
+      <footer class="py-5 bg-dark">
+          <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Seabook 2021</p></div>
+      </footer>
+    </div>
   );
 }
 

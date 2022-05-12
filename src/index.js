@@ -12,6 +12,7 @@ import Mappa from "./Mappa";
 import Expenses from "./routes/expenses";
 // import Invoices from "./routes/invoices";
 import Stabilimenti from "./routes/stabilimenti"
+import StabilimentiList from "./routes/StabilimentiList"
 // import Invoice from "./routes/invoice";
 
 // const rootElement = document.getElementById("root");
@@ -24,15 +25,8 @@ root.render(
       <Route path="/" element={<App />}>
         <Route path="expenses" element={<Expenses />} />
         <Route path="stabilimenti" element={<Stabilimenti />}>
-          <Route
-            index
-            element={
-              <main style={{ padding: "1rem" }}>
-                <p>Select a stabilimento</p>
-              </main>
-            }
-          />
           <Route path=":stabilimentoId" element={<Mappa />} />
+          <Route index element={<StabilimentiList />} />
         </Route>
         <Route
           path="*"
