@@ -4,7 +4,7 @@ import './App.css';
 
 export default function App() {
   return (
-    <div>
+    <>
       {/* <h1>Seabook!</h1> */}
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container px-4 px-lg-5">
@@ -25,7 +25,7 @@ export default function App() {
       <footer class="py-5 bg-dark">
           <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Seabook 2021</p></div>
       </footer>
-    </div>
+    </>
   );
 }
 

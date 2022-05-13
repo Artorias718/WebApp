@@ -5,7 +5,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import axios from 'axios';
-// import 'bootstrap/dist/css/bootstrap.css';
 import './mappa.css';
 
 export default function Mappa() {
@@ -33,16 +32,16 @@ export default function Mappa() {
       // setIsLoading(true);
 
       try {
-          const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + stabilimentoId + '/lista_Posti');
+        const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + stabilimentoId + '/lista_Posti');
 
-          setSeat(result.data);
-          setSeatAvailable(result.data.filter(s => s.booked === false));
-          setSeatReserved([]);
+        setSeat(result.data);
+        setSeatAvailable(result.data.filter(s => s.booked === false));
+        setSeatReserved([]);
       } catch (error) {
-          console.log(error);
-          alert(error);
+        console.log(error);
+        alert(error);
       }
-      
+
       // setIsLoading(false);
     };
 
@@ -61,16 +60,16 @@ export default function Mappa() {
 
     // setData();
   }, [stabilimentoId]);
-    
+
   // metodo che permette di aggiornare i posti scelti dall'utente
   const onClickData = (seat) => {
     if (seat.booked) {
       alert('Posto: ' + seat.id + ' non disponibile!');
     }
     else {
-      if(seatReserved.findIndex((element) => element.id === seat.id) > -1 ) {
+      if (seatReserved.findIndex((element) => element.id === seat.id) > -1) {
         setSeatAvailable(seatAvailable.concat(seat));
-        setSeatReserved(seatReserved.filter(res => res.id !== seat.id));  
+        setSeatReserved(seatReserved.filter(res => res.id !== seat.id));
       } else {
         setSeatReserved(seatReserved.concat(seat));
         setSeatAvailable(seatAvailable.filter(res => res.id !== seat.id));
@@ -86,7 +85,7 @@ export default function Mappa() {
     console.log(seatReserved);
     let reservedIds = seatReserved.map(s => s.id);
     console.log(reservedIds);
-    
+
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce#sum_of_values_in_an_object_array
     let initialValue = 0;
     let totalPrice = seatReserved.reduce(
@@ -108,12 +107,12 @@ export default function Mappa() {
         "listaPostiPrenotati": reservedIds,
         "totalPrice": totalPrice
       })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
 
   }
@@ -121,14 +120,14 @@ export default function Mappa() {
   return (
     <main>
       <h1>Seat Reservation System</h1>
-      <DrawGrid 
-        seat = { seat }
-        available = { seatAvailable }
-        reserved = { seatReserved }
-        onClickData = { onClickData.bind(this) }
+      <DrawGrid
+        seat={seat}
+        available={seatAvailable}
+        reserved={seatReserved}
+        onClickData={onClickData.bind(this)}
       />
       <p style={{ float: "right" }}>
-      <button type='submit' style={{ margin: "1rem" }}
+        <button type='submit' style={{ margin: "1rem" }}
           onClick={handleSubmit
             // () => {
             // deleteInvoice(invoice.number);
@@ -150,65 +149,65 @@ export default function Mappa() {
     </main>
   )
 }
-  
-function DrawGrid({seat, available, reserved, onClickData}) {
+
+function DrawGrid({ seat, available, reserved, onClickData }) {
   const onClickSeat = (seat) => {
-    onClickData(seat);  
+    onClickData(seat);
   }
-  
+
   return (
     <div className="container">
       <h2></h2>
       <table className="grid">
         <tbody>
-            <tr>
-              { seat.map( row =>
-                <td
-                  className={
-                    row.booked ? 'booked' : 
-                      reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
-                    // () => {
-                    //   // return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
-                    //   if (row.booked) {
-                    //     return 'booked';
-                    //   }
-                    //   else {
-                    //     return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
-                    //   }
-                    // }
-                    // reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
-                  }
-                  key={row.id} onClick = {e => onClickSeat(row)}><a href="#">{row.id}</a></td>) }
-            </tr>
+          <tr>
+            {seat.map(row =>
+              <td
+                className={
+                  row.booked ? 'booked' :
+                    reserved.findIndex((element) => element.id === row.id) > -1 ? 'reserved' : 'available'
+                  // () => {
+                  //   // return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
+                  //   if (row.booked) {
+                  //     return 'booked';
+                  //   }
+                  //   else {
+                  //     return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
+                  //   }
+                  // }
+                  // reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
+                }
+                key={row.id} onClick={e => onClickSeat(row)}><a href="#">{row.id}</a></td>)}
+          </tr>
         </tbody>
       </table>
-      
-      <AvailableList available = { available } />
-      <ReservedList reserved = { reserved } />
+
+      <AvailableList available={available} />
+      <ReservedList reserved={reserved} />
     </div>
   )
- 
+
 }
 
 function AvailableList({ available }) {
   const seatCount = available.length;
 
-  return(
+  return (
     <div className="left">
-      <h4>Available Seats: ({seatCount === 0? 'No seats available' : seatCount})</h4>
+      <h4>Available Seats: ({seatCount === 0 ? 'No seats available' : seatCount})</h4>
       <ul>
-        { available.map( res => <li key={res.id} >{res.id}</li> ) }
+        {available.map(res => <li key={res.id} >{res.id}</li>)}
       </ul>
     </div>
   )
 }
 
 function ReservedList({ reserved }) {
-  return(
+  return (
     <div className="right">
       <h4>Reserved Seats: ({reserved.length})</h4>
       <ul>
-        { reserved.map(res => <li key={res.id} >{res.id} - €: {res.price}</li>) }
+        {reserved.map(res => <li key={res.id} >{res.id} - €: {res.price}</li>)}
       </ul>
     </div>
   )
