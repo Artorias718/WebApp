@@ -1,3 +1,79 @@
+.myMap {
+  background-image: linear-gradient(rgba(74, 36, 24, 0.65), rgba(71, 40, 29, 0.65)), url("../src/assets/img/bg.jpg");
+    /* background-image: linear-gradient(rgba(47, 23, 15, 0.65), rgba(47, 23, 15, 0.65)), url("../src/assets/img/bg.jpg"); */
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+.myRow {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-0.5 * var(--bs-gutter-x));
+  margin-left: calc(-0.5 * var(--bs-gutter-x));
+}
+
+.myRow > * {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-top: var(--bs-gutter-y);
+}
+.myCol {
+  flex: 1 0 0%;
+  margin: 10px;
+}
+
+.myRow-cols-auto > * {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.myRow-cols-1 > * {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.myRow-cols-2 > * {
+  flex: 0 0 auto;
+  width: 50%;
+}
+
+.myRow-cols-3>* {
+  flex: 0 0 auto;
+  width: 33.3333333333%;
+}
+
+.myRow-cols-4>* {
+  flex: 0 0 auto;
+  width: 25%;
+}
+
+.myRow-cols-5>* {
+  flex: 0 0 auto;
+  width: 20%;
+}
+
+.myRow-cols-6>* {
+  flex: 0 0 auto;
+  width: 16.6666666667%;
+}
+
+.myRow-cols-7 > * {
+  flex: 0 0 auto;
+  width: 14.2857143%;
+}
+
+.myRow-cols-8 > * {
+  flex: 0 0 auto;
+  width: 12.5%;
+}
+
 #app {
 }
 
@@ -5,9 +81,31 @@ h1 {
   text-align: center;
 }
 
-.container {
+.mapContainer {
   width: 80%;
   margin: auto;
+}
+
+.grid-container {
+  display: grid;
+  /* 10 columns con la stessa dimensione */
+  grid-template-columns: repeat(10, auto);
+  grid-gap: 2vmax;
+  /* background-color: #2196F3; */
+  padding: 10px;
+}
+
+.grid-container > div {
+  /* background-color: rgba(255, 255, 255, 0.8); */
+  border: 2px solid orange;
+  text-align: center;
+  padding: .5em;
+  font-size: 2vw;
+}
+
+.grid-container > div:hover {
+  opacity: .7;
+  cursor: pointer;
 }
 
 /* .grid td {
@@ -42,15 +140,15 @@ h1 {
 }
 
 .reserved::after {
-  content: 'RESERVED'
+  /* content: 'RESERVED' */
 }
 
 .available::after {
-  content: 'AVAILABLE'
+  /* content: 'AVAILABLE' */
 }
 
 .available {
-  color: #333;
+  color: rgb(255, 255, 255);
 }
 
 li {
@@ -64,5 +162,5 @@ li {
 }
 
 .booked::after {
-  content: 'UNAVAILABLE'
+  /* content: 'UNAVAILABLE' */
 }

@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 import './mappa.css';
+import backImg from '../src/assets/img/bg.jpg';
 
 export default function Mappa() {
   let navigate = useNavigate();
@@ -112,41 +113,69 @@ export default function Mappa() {
         })
         .catch(function (error) {
           console.log(error);
+          alert(error);
         });
     }
 
   }
 
   return (
-    <main>
-      <h1>Seat Reservation System</h1>
-      <DrawGrid
-        seat={seat}
-        available={seatAvailable}
-        reserved={seatReserved}
-        onClickData={onClickData.bind(this)}
-      />
-      <p style={{ float: "right" }}>
-        <button type='submit' style={{ margin: "1rem" }}
-          onClick={handleSubmit
-            // () => {
-            // deleteInvoice(invoice.number);
-            // navigate("/invoices" + location.search);
-            // }
-          }
-        >
-          Conferma
-        </button>
-        <button style={{ margin: "1rem" }}
-          onClick={() => {
-            // deleteInvoice(invoice.number);
-            navigate("/stabilimenti" + location.search);
-          }}
-        >
-          Back
-        </button>
-      </p>
-    </main>
+    <>
+      <div className='myMap'>
+        <header class="py-5">
+          {/* <header className="masthead"> */}
+
+          <div class="overlay"></div>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="post-heading text-white">
+                  <h1>I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.</h1>
+
+                  <span class="meta">Posted by
+                    <a href="#">Start Bootstrap</a>
+                    on January 31, 2020 · <span class="reading-time" title="Estimated read time">
+
+                      4 mins  read </span>
+
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <section class="py-5 text-white">
+          <h1 class="mb-5">Stabilimento Acqua e Sale</h1>
+          <DrawGrid
+            seat={seat}
+            available={seatAvailable}
+            reserved={seatReserved}
+            onClickData={onClickData.bind(this)}
+          />
+          <p style={{ float: "right" }}>
+            <button style={{ margin: "1rem" }}
+              onClick={() => {
+                // deleteInvoice(invoice.number);
+                navigate("/stabilimenti" + location.search);
+              }}
+            >
+              Back
+            </button>
+            <button type='submit' style={{ margin: "1rem" }}
+              onClick={handleSubmit
+                // () => {
+                // deleteInvoice(invoice.number);
+                // navigate("/invoices" + location.search);
+                // }
+              }
+            >
+              Conferma
+            </button>
+          </p>
+        </section>
+      </div>
+      
+    </>
   )
 }
 
@@ -156,31 +185,58 @@ function DrawGrid({ seat, available, reserved, onClickData }) {
   }
 
   return (
-    <div className="container">
-      <h2></h2>
-      <table className="grid">
+    <div className="mapContainer">
+      <div className="grid-container">
+        {seat.map(s =>
+          <div
+            className={
+              s.booked ? 'booked' :
+                reserved.findIndex((element) => element.id === s.id) > -1 ? 'reserved' : 'available'
+              // () => {
+              //   // return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
+              //   if (row.booked) {
+              //     return 'booked';
+              //   }
+              //   else {
+              //     return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
+              //   }
+              // }
+              // reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
+            }
+            key={s.id} onClick={e => onClickSeat(s)}>
+            {s.id}
+          </div>
+        )
+        }
+      </div>
+      {/* <table className="grid">
         <tbody>
-          <tr>
+          <tr className="myRow gx-4 gx-lg-5 myRow-cols-8 justify-content-center">
             {seat.map(row =>
-              <td
-                className={
-                  row.booked ? 'booked' :
-                    reserved.findIndex((element) => element.id === row.id) > -1 ? 'reserved' : 'available'
-                  // () => {
-                  //   // return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
-                  //   if (row.booked) {
-                  //     return 'booked';
-                  //   }
-                  //   else {
-                  //     return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
-                  //   }
-                  // }
-                  // reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
-                }
-                key={row.id} onClick={e => onClickSeat(row)}><a href="#">{row.id}</a></td>)}
+              <div className="myCol mb-5" key={row.id}>
+                <td
+                  className={
+                    row.booked ? 'booked' :
+                      reserved.findIndex((element) => element.id === row.id) > -1 ? 'reserved' : 'available'
+                    // () => {
+                    //   // return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
+                    //   if (row.booked) {
+                    //     return 'booked';
+                    //   }
+                    //   else {
+                    //     return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
+                    //   }
+                    // }
+                    // reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
+                  }
+                  key={row.id} onClick={e => onClickSeat(row)}>{row.id}
+                </td>
+              </div>
+            )
+            }
           </tr>
         </tbody>
-      </table>
+      </table> */}
 
       <AvailableList available={available} />
       <ReservedList reserved={reserved} />
