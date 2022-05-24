@@ -99,7 +99,7 @@ export default function Stabilimenti() {
                     {/* <input class="form-control form-control-lg" id="emailAddress" placeholder="Search location" /> */}
                     <input
                       className="form-control form-control-lg"
-                      placeholder="Search location"
+                      placeholder="Dove vuoi andare?"
                       value={searchParams.get("filter") || ""}
                       onChange={(event) => {
                         let filter = event.target.value;

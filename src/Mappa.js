@@ -17,6 +17,7 @@ export default function Mappa() {
   const [seat, setSeat] = useState([]);
   const [seatAvailable, setSeatAvailable] = useState([]);
   const [seatReserved, setSeatReserved] = useState([]);
+  const [stabilimento, setStabilimento] = useState([]);
 
   /* {
         "id": 6,
@@ -29,6 +30,18 @@ export default function Mappa() {
     } */
 
   useEffect(() => {
+
+    const fecthStabilimentoData = async (id) => {
+      try {
+        const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + id);
+
+        setStabilimento(result.data);
+
+      } catch (error) {
+        
+      }
+    };
+
     const fetchData = async () => {
       // setIsLoading(true);
 
@@ -45,6 +58,8 @@ export default function Mappa() {
 
       // setIsLoading(false);
     };
+
+    fecthStabilimentoData(stabilimentoId);
 
     fetchData();
 
@@ -81,8 +96,8 @@ export default function Mappa() {
   // metodo handle per conferma/prenota
   function handleSubmit(e) {
     e.preventDefault();
-    console.log('You clicked submit.');
-    console.log('stabilimentoID: ' + stabilimentoId);
+    // console.log('You clicked submit.');
+    // console.log('stabilimentoID: ' + stabilimentoId);
     console.log(seatReserved);
     let reservedIds = seatReserved.map(s => s.id);
     console.log(reservedIds);
@@ -110,6 +125,8 @@ export default function Mappa() {
       })
         .then(function (response) {
           console.log(response);
+          alert("Prenotazione andata a buon fine");
+          navigate("/stabilimenti" + location.search);
         })
         .catch(function (error) {
           console.log(error);
@@ -130,13 +147,17 @@ export default function Mappa() {
             <div class="row">
               <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="post-heading text-white">
-                  <h1>I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.</h1>
+                  <h1>{stabilimento.name}</h1>
+                  <h4>Stabilimento Balneare sito in {stabilimento.address}.</h4>
+                  <p><i class="bi bi-telephone-fill"> {stabilimento.phoneNumber}</i> </p>
 
-                  <span class="meta">Posted by
-                    <a href="#">Start Bootstrap</a>
+                  <span class="meta"><p><em>I servizi offerti</em></p>
+                    <p>Vasta e variegata è la gamma di servizi. Ampi ombrelloni e comode sdraio assicureranno protezione e relax nei momenti in cui i raggi solari scottano di più.</p>
+                    <p>Quando la fame morde, infine, ai bagnanti verrà offerta la possibilità di ristorarsi all'interno di un bar nel quale vengono preparati drink e pietanze di ogni genere.</p>
+                    {/* <a href="#"> Start Bootstrap</a>
                     on January 31, 2020 · <span class="reading-time" title="Estimated read time">
 
-                      4 mins  read </span>
+                      4 mins  read </span> */}
 
                   </span>
                 </div>
@@ -145,33 +166,38 @@ export default function Mappa() {
           </div>
         </header>
         <section class="py-5 text-white">
-          <h1 class="mb-5">Stabilimento Acqua e Sale</h1>
+          <h1 class="mb-5">Seleziona la postazione</h1>
           <DrawGrid
             seat={seat}
             available={seatAvailable}
             reserved={seatReserved}
             onClickData={onClickData.bind(this)}
           />
-          <p style={{ float: "right" }}>
-            <button style={{ margin: "1rem" }}
-              onClick={() => {
-                // deleteInvoice(invoice.number);
-                navigate("/stabilimenti" + location.search);
-              }}
-            >
-              Back
-            </button>
-            <button type='submit' style={{ margin: "1rem" }}
-              onClick={handleSubmit
-                // () => {
-                // deleteInvoice(invoice.number);
-                // navigate("/invoices" + location.search);
-                // }
-              }
-            >
-              Conferma
-            </button>
-          </p>
+        </section>
+        <section class="py-5 text-white">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8 col-md-10 mx-auto justify-content-end" style={{ justifyContent: "right" }}>
+                <div class="d-grid gap-4 d-md-flex justify-content-md-end">
+                  <button class="btn btn-light" type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // deleteInvoice(invoice.number);
+                      navigate("/stabilimenti" + location.search);
+                    }}
+                  >Back</button>
+                  <button class="btn btn-primary me-md-2" type="button"
+                    onClick={handleSubmit
+                      // () => {
+                      // deleteInvoice(invoice.number);
+                      // navigate("/invoices" + location.search);
+                      // }
+                    }
+                  >Prenota</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
       
@@ -209,36 +235,8 @@ function DrawGrid({ seat, available, reserved, onClickData }) {
         )
         }
       </div>
-      {/* <table className="grid">
-        <tbody>
-          <tr className="myRow gx-4 gx-lg-5 myRow-cols-8 justify-content-center">
-            {seat.map(row =>
-              <div className="myCol mb-5" key={row.id}>
-                <td
-                  className={
-                    row.booked ? 'booked' :
-                      reserved.findIndex((element) => element.id === row.id) > -1 ? 'reserved' : 'available'
-                    // () => {
-                    //   // return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
-                    //   if (row.booked) {
-                    //     return 'booked';
-                    //   }
-                    //   else {
-                    //     return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
-                    //   }
-                    // }
-                    // reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available'
-                  }
-                  key={row.id} onClick={e => onClickSeat(row)}>{row.id}
-                </td>
-              </div>
-            )
-            }
-          </tr>
-        </tbody>
-      </table> */}
 
-      <AvailableList available={available} />
+      {/* <AvailableList available={available} /> */}
       <ReservedList reserved={reserved} />
     </div>
   )
@@ -261,7 +259,7 @@ function AvailableList({ available }) {
 function ReservedList({ reserved }) {
   return (
     <div className="right">
-      <h4>Reserved Seats: ({reserved.length})</h4>
+      <h4>Stai prenotando: ({reserved.length})</h4>
       <ul>
         {reserved.map(res => <li key={res.id} >{res.id} - €: {res.price}</li>)}
       </ul>
