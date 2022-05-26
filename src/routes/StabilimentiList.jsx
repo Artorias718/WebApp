@@ -86,6 +86,13 @@ export default function Stabilimenti() {
     // setData();
   }, []);
 
+  // Save data to sessionStorage
+  sessionStorage.setItem('key', 'value');
+
+  // Get saved data from sessionStorage
+  let data = sessionStorage.getItem('key');
+  console.log(data);
+
   return (
     <>
       <header class="masthead">

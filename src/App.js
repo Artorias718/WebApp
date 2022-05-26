@@ -14,7 +14,7 @@ export default function App() {
               <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                   <li className="nav-item"><Link className="nav-link active" to="/">Home</Link></li>
                   <li className="nav-item"><Link className="nav-link" to="/stabilimenti">Stabilimenti</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/expenses">Expenses</Link></li>
+                  <li className="nav-item"><Link className="nav-link" to="/expenses">Gestione</Link></li>
               </ul>
           </div>
           {/* <Link to="/stabilimenti">Stabilimenti</Link>
