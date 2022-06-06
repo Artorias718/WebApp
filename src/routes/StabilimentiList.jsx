@@ -208,11 +208,14 @@ export default function Stabilimenti() {
                         <h5 class="fw-bolder">{stabilimento.name}</h5>
                         {/* <!-- Product reviews--> */}
                         <div class="d-flex justify-content-center small text-warning mb-2">
+                          <span style={{ marginRight: "5px", color: "#70757a", whiteSpace: "nowrap" }}
+                            >{stabilimento.rating}</span>
+                          <ReviewStars rating={stabilimento.rating} />
+                          {/* <div class="bi-star-fill"></div>
                           <div class="bi-star-fill"></div>
                           <div class="bi-star-fill"></div>
                           <div class="bi-star-fill"></div>
-                          <div class="bi-star-fill"></div>
-                          <div class="bi-star-fill"></div>
+                          <div class="bi-star-fill"></div> */}
                         </div>
                         {/* <!-- Product price--> */}
                         <span class="text-muted text-decoration-line-through">$40.00</span>
@@ -243,8 +246,39 @@ export default function Stabilimenti() {
   );
 }
 
-
 function QueryNavLink({ to, ...props }) {
   let location = useLocation();
   return <NavLink to={to + location.search} {...props} />;
+}
+
+function ReviewStars({ rating }) {
+  let integerPart = Math.trunc(rating);
+  console.log(integerPart);
+  let stars = new Array(integerPart);
+
+  for (let i = 0; i < integerPart; i++) {
+    stars[i] = i;
+  }
+  
+  let decimalpart = (rating * 10) % 10;
+  console.log('Decimal: ' + decimalpart);
+
+  return(
+    <>
+      {stars.map(s =>
+        <div class="bi-star-fill" key={s}></div>
+        )
+      }
+      {decimalpart > 3 && decimalpart < 7 ? <div class="bi-star-half"></div> : ''}
+      {decimalpart >= 7 ? <div class="bi-star-fill"></div> : ''}
+      
+    </>
+  )
+
+}
+
+function star() {
+  return(
+    <div class="bi-star-fill"></div>
+  )
 }
