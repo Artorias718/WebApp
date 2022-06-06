@@ -6,15 +6,49 @@ import {
   useLocation
 } from "react-router-dom";
 import axios from 'axios';
-import { Card, Button, Row, Stack } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
-import logo from '../logo.svg';
+// import { Card, Button, Row, Stack } from 'react-bootstrap';
+// import Container from 'react-bootstrap/Container';
+// import logo from '../logo.svg';
 import '../css/stabilimenti.css';
+// import DateTime from '../utils/DateTime.js'
+// import '../css/myDatePicker.css'
 
 export default function Stabilimenti() {
   let [searchParams, setSearchParams] = useSearchParams();
 
   const [stabilimenti, setStabilimenti] = useState([]);
+
+  const API_KEY = 'AIzaSyAk5gXXtzL3bDr--V7jI71K42Bb1Yp7fwY'
+  
+  function formatDate(date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  const date = new Date();
+  console.log('to locale: ' + date.toLocaleDateString('it-IT'));
+  const event = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
+  // const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
+  console.log(event.toLocaleDateString('it-IT', options));
+
+  let today = formatDate(date);
+  console.log(today);
+
+  const data = new Date().toLocaleDateString('it-IT');
+  console.log(data);
+
+  const [initialDate, setInitialDate] = useState(today);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,11 +121,20 @@ export default function Stabilimenti() {
   }, []);
 
   // Save data to sessionStorage
-  sessionStorage.setItem('key', 'value');
+  // sessionStorage.setItem('key', 'value');
 
   // Get saved data from sessionStorage
-  let data = sessionStorage.getItem('key');
-  console.log(data);
+  // let data = sessionStorage.getItem('key');
+  // console.log(data);
+
+  function setDate(e) {
+    e.preventDefault();
+    let selectedDate = e.target.value;
+    console.log('selected date: ' + selectedDate);
+    setInitialDate(selectedDate);
+    console.log('initial date: ' + initialDate);
+    sessionStorage.setItem('selectedDate', selectedDate);
+  }
 
   return (
     <>
@@ -101,7 +144,7 @@ export default function Stabilimenti() {
             <div class="col-xl-6">
               <div class="text-center text-white">
                 <h1 class="mb-5">Le migliori spiaggie a un click!</h1>
-                <div class="row">
+                <div class="row mb-3">
                   <div class="col">
                     {/* <input class="form-control form-control-lg" id="emailAddress" placeholder="Search location" /> */}
                     <input
@@ -120,6 +163,16 @@ export default function Stabilimenti() {
                   </div>
                   {/* <div class="col-auto"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">Submit</button></div> */}
                 </div>
+                <div class="row mb-3">
+                  <label for="colFormLabel" class="col-sm-4 col-form-label">Seleziona la Data</label>
+                  <div class="col-md-4">
+                    <input className="form-control" type="date" id="start" name="trip-start"
+                      value={initialDate} 
+                      onChange={setDate}
+                      min={today} />
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -142,7 +195,12 @@ export default function Stabilimenti() {
                     {/* <!-- Sale badge--> */}
                     <div class="badge bg-dark text-white position-absolute" style={{ top: '0.5rem', right: '0.5rem' }}>Sale</div>
                     {/* <!-- Product image--> */}
-                    <img class="card-img-top" src={require('../assets/img/' + stabilimento.id + '.jpg')} alt="..." />
+                    <img class="card-img-top"
+                      // src={ stabilimento.id <= 10 ? require('../assets/img/' + stabilimento.id + '.jpg') :
+                      // require('../assets/img/' + stabilimento.id % 10 + '.jpg')}
+                      // src='https://lh3.googleusercontent.com/places/AAcXr8qU5TgblPL2xi8n_5WjwK-jXDg_E5kziDW48WmwRW7r2o06B7-ve00rJRS4VW8pov_CuC-CaZsZi7Bu1aTA7W_9NhcvBavjbTw=s1600-w400'
+                      src={'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=' + stabilimento.photoRef + '&key=' + API_KEY}
+                      alt="..." />
                     {/* <!-- Product details--> */}
                     <div class="card-body p-4">
                       <div class="text-center">
