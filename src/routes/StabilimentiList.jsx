@@ -21,20 +21,25 @@ export default function Stabilimenti() {
   const API_KEY = 'AIzaSyAk5gXXtzL3bDr--V7jI71K42Bb1Yp7fwY'
 
   const date = new Date();
-  console.log('to locale: ' + date.toLocaleDateString('it-IT'));
+  // console.log('to locale: ' + date.toLocaleDateString('it-IT'));
   const event = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
   // const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
-  console.log(date.toLocaleDateString('it-IT', options));
+  // console.log(date.toLocaleDateString('it-IT', options));
 
   let today = formatDate(date);
-  console.log(today);
+  // console.log(today);
 
   const data = new Date().toLocaleDateString('it-IT');
-  console.log(data);
+  // console.log(data);
 
-  const [initialDate, setInitialDate] = useState('');
+  let sDate = sessionStorage.getItem('selectedDate');
+  console.log('session storage: ' + sDate);
+  if (sDate === null) {
+    sDate = '';
+  }
+  const [initialDate, setInitialDate] = useState(sDate);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,7 +109,7 @@ export default function Stabilimenti() {
     };
 
     // setData();
-  }, []);
+  }, [initialDate]);
 
   // Save data to sessionStorage
   // sessionStorage.setItem('key', 'value');
@@ -166,7 +171,8 @@ export default function Stabilimenti() {
       </header>
       <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
-          <h2>Stabilimenti</h2>
+          {/* <header className="py-3"><h2>Stabilimenti</h2></header> */}
+          
           <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
             {stabilimenti
               .filter((stabilimento) => {
@@ -240,7 +246,7 @@ function QueryNavLink({ to, ...props }) {
 
 function ReviewStars({ rating }) {
   let integerPart = Math.trunc(rating);
-  console.log(integerPart);
+  // console.log(integerPart);
   let stars = new Array(integerPart);
 
   for (let i = 0; i < integerPart; i++) {
@@ -248,7 +254,7 @@ function ReviewStars({ rating }) {
   }
   
   let decimalpart = (rating * 10) % 10;
-  console.log('Decimal: ' + decimalpart);
+  // console.log('Decimal: ' + decimalpart);
 
   return(
     <>

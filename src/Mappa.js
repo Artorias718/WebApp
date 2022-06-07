@@ -156,6 +156,7 @@ export default function Mappa() {
     console.log(date);
     setSelectedDate(date);
     console.log(selectedDate);
+    sessionStorage.setItem('selectedDate', date);
   }
 
   return (
