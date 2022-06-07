@@ -19,20 +19,6 @@ export default function Stabilimenti() {
   const [stabilimenti, setStabilimenti] = useState([]);
 
   const API_KEY = 'AIzaSyAk5gXXtzL3bDr--V7jI71K42Bb1Yp7fwY'
-  
-  function formatDate(date) {
-    var d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2)
-      month = '0' + month;
-    if (day.length < 2)
-      day = '0' + day;
-
-    return [year, month, day].join('-');
-  }
 
   const date = new Date();
   console.log('to locale: ' + date.toLocaleDateString('it-IT'));
@@ -40,7 +26,7 @@ export default function Stabilimenti() {
   // const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
-  console.log(event.toLocaleDateString('it-IT', options));
+  console.log(date.toLocaleDateString('it-IT', options));
 
   let today = formatDate(date);
   console.log(today);
@@ -48,7 +34,7 @@ export default function Stabilimenti() {
   const data = new Date().toLocaleDateString('it-IT');
   console.log(data);
 
-  const [initialDate, setInitialDate] = useState(today);
+  const [initialDate, setInitialDate] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -198,8 +184,9 @@ export default function Stabilimenti() {
                     <img class="card-img-top"
                       // src={ stabilimento.id <= 10 ? require('../assets/img/' + stabilimento.id + '.jpg') :
                       // require('../assets/img/' + stabilimento.id % 10 + '.jpg')}
-                      // src='https://lh3.googleusercontent.com/places/AAcXr8qU5TgblPL2xi8n_5WjwK-jXDg_E5kziDW48WmwRW7r2o06B7-ve00rJRS4VW8pov_CuC-CaZsZi7Bu1aTA7W_9NhcvBavjbTw=s1600-w400'
-                      src={'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=' + stabilimento.photoRef + '&key=' + API_KEY}
+                      src={stabilimento.photoRef !== null ?
+                        'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=' + stabilimento.photoRef + '&key=' + API_KEY
+                        : require('../assets/img/chesapeake-samples.png') }
                       alt="..." />
                     {/* <!-- Product details--> */}
                     <div class="card-body p-4">
@@ -209,7 +196,7 @@ export default function Stabilimenti() {
                         {/* <!-- Product reviews--> */}
                         <div class="d-flex justify-content-center small text-warning mb-2">
                           <span style={{ marginRight: "5px", color: "#70757a", whiteSpace: "nowrap" }}
-                            >{stabilimento.rating}</span>
+                          >{stabilimento.rating > 0 ? stabilimento.rating : ''}</span>
                           <ReviewStars rating={stabilimento.rating} />
                           {/* <div class="bi-star-fill"></div>
                           <div class="bi-star-fill"></div>
@@ -281,4 +268,19 @@ function star() {
   return(
     <div class="bi-star-fill"></div>
   )
+}
+
+
+function formatDate(date) {
+  var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2)
+    month = '0' + month;
+  if (day.length < 2)
+    day = '0' + day;
+
+  return [year, month, day].join('-');
 }
