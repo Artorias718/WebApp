@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../js/form-validation.js'
-import { Toast } from 'bootstrap';
 
 export default function Expenses() {
   const [placeID, setPlaceID] = useState('');

@@ -5,6 +5,10 @@ import {
   useLocation,
 } from "react-router-dom";
 import axios from 'axios';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import DatePicker from 'react-date-picker';
+import 'react-date-picker/dist/DatePicker.css'
 import './mappa.css';
 //import backImg from '../src/assets/img/bg.jpg';
 // import '../src/js/form-validation.js'
@@ -24,6 +28,7 @@ export default function Mappa() {
   let sDate = sessionStorage.getItem('selectedDate');
   console.log(sDate);
   const [selectedDate, setSelectedDate] = useState(sDate);
+  const [value, onChange] = useState(new Date(sDate));
 
   const today = formatDate(new Date());
 
@@ -148,14 +153,20 @@ export default function Mappa() {
   }
 
   function setDate(e) {
-    console.log(e.target.value);
+    // console.log(e.target.value);
 
-    const date = e.target.value;
+    // const date = e.target.value;
 
-    let newDate = new Date();
-    console.log(date);
-    setSelectedDate(date);
+    // let newDate = new Date();
+    // console.log(date);
+    setSelectedDate(e);
     console.log(selectedDate);
+    sessionStorage.setItem('selectedDate', e);
+  }
+
+  function handleDateSelection(date) {
+    console.log('handleDateSelection: ' + date)
+    onChange(date);
     sessionStorage.setItem('selectedDate', date);
   }
 
@@ -188,10 +199,13 @@ export default function Mappa() {
                   <div class="row mb-3">
                     <label for="colFormLabel" class="col-sm-4 col-form-label">Data</label>
                     <div class="col-md-4">
-                      <input className="form-control" type="date" id="start" name="trip-start"
+                      {/* <input className="form-control" type="date" id="start" name="trip-start"
                         value={selectedDate}
                         onChange={setDate}
-                        min={today} />
+                        min={today} /> */}
+                      <div>
+                        <DatePicker className='form-control' onChange={handleDateSelection} value={value} format={"dd/MM/yyyy"} />
+                      </div>
                     </div>
                   </div>
 
@@ -264,12 +278,15 @@ export default function Mappa() {
                       </form>
                     </div>
                     <div class="col-md-7 col-lg-8">
-                      <h4 class="mb-3">Riepilogo</h4>
+                      <h4 class="mb-4">Riepilogo</h4>
                       <div class="row gy-3">
-                        <div class="row">
+                        <div class="row mb-3">
                           <label for="colFormLabel" class="col-sm-2 col-form-label">Data:</label>
                           <div class="col-md-3">
                             <input type="text" readonly class="form-control-plaintext" id="riepData" value={formatDate(selectedDate)} />
+                          </div>
+                          <div>
+                            <Calendar value={new Date(selectedDate)}/>
                           </div>
                         </div>
 

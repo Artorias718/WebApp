@@ -65,3 +65,4 @@ reportWebVitals();*/
 // npm install react react-dom
 // npm install react-bootstrap bootstrap
 // npm i react - modern - calendar - datepicker
+// npm install react - calendar or yarn add react - calendar

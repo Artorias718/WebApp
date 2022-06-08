@@ -6,39 +6,44 @@ import {
   useLocation
 } from "react-router-dom";
 import axios from 'axios';
-// import { Card, Button, Row, Stack } from 'react-bootstrap';
-// import Container from 'react-bootstrap/Container';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import DatePicker from 'react-date-picker';
+import 'react-date-picker/dist/DatePicker.css'
 // import logo from '../logo.svg';
 import '../css/stabilimenti.css';
 // import DateTime from '../utils/DateTime.js'
-// import '../css/myDatePicker.css'
+import '../css/myDatePicker.css'
 
 export default function Stabilimenti() {
   let [searchParams, setSearchParams] = useSearchParams();
-
+  
+  let sDate = sessionStorage.getItem('selectedDate');
+  console.log('session storage: ' + sDate);
+  if (sDate === null) {
+    sDate = '';
+  }
+  
   const [stabilimenti, setStabilimenti] = useState([]);
+  const [mydate, setMydate] = useState(new Date(sDate));
+  const [value, onChange] = useState(new Date(sDate));
 
   const API_KEY = 'AIzaSyAk5gXXtzL3bDr--V7jI71K42Bb1Yp7fwY'
 
   const date = new Date();
   // console.log('to locale: ' + date.toLocaleDateString('it-IT'));
-  const event = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
+  // const event = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
   // const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+  // const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
   // console.log(date.toLocaleDateString('it-IT', options));
 
   let today = formatDate(date);
   // console.log(today);
 
-  const data = new Date().toLocaleDateString('it-IT');
+  // const data = new Date().toLocaleDateString('it-IT');
   // console.log(data);
 
-  let sDate = sessionStorage.getItem('selectedDate');
-  console.log('session storage: ' + sDate);
-  if (sDate === null) {
-    sDate = '';
-  }
   const [initialDate, setInitialDate] = useState(sDate);
 
   useEffect(() => {
@@ -127,6 +132,12 @@ export default function Stabilimenti() {
     sessionStorage.setItem('selectedDate', selectedDate);
   }
 
+  function handleDateSelection(date) {
+    console.log('handleDateSelection: ' + date)
+    onChange(date);
+    sessionStorage.setItem('selectedDate', date);
+  }
+
   return (
     <>
       <header class="masthead">
@@ -155,12 +166,19 @@ export default function Stabilimenti() {
                   {/* <div class="col-auto"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">Submit</button></div> */}
                 </div>
                 <div class="row mb-3">
+                  {/* <label for="exampleFormControlInput1" class="form-label">Data</label> */}
                   <label for="colFormLabel" class="col-sm-4 col-form-label">Seleziona la Data</label>
                   <div class="col-md-4">
-                    <input className="form-control" type="date" id="start" name="trip-start"
+                    {/* <input className="form-control" type="date" id="start" name="trip-start"
                       value={initialDate} 
                       onChange={setDate}
-                      min={today} />
+                      min={today} /> */}
+                    <div>
+                      <DatePicker className='form-control' onChange={handleDateSelection} value={value} format={"dd/MM/yyyy"} />
+                    </div>
+                  </div>
+                  {/* <Calendar onChange={setMydate} value={mydate} /> */}
+                  <div>
                   </div>
                 </div>
 
@@ -288,5 +306,6 @@ function formatDate(date) {
   if (day.length < 2)
     day = '0' + day;
 
-  return [year, month, day].join('-');
+  return [day, month, year].join('/');
+  //return [year, month, day].join('/');
 }
