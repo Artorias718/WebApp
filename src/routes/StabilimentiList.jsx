@@ -21,7 +21,8 @@ export default function Stabilimenti() {
   let sDate = sessionStorage.getItem('selectedDate');
   console.log('session storage: ' + sDate);
   if (sDate === null) {
-    sDate = '';
+    sDate = new Date;
+    sessionStorage.setItem('selectedDate', sDate);
   }
   
   const [stabilimenti, setStabilimenti] = useState([]);
@@ -114,7 +115,7 @@ export default function Stabilimenti() {
     };
 
     // setData();
-  }, [initialDate]);
+  }, [value]);
 
   // Save data to sessionStorage
   // sessionStorage.setItem('key', 'value');
@@ -167,7 +168,7 @@ export default function Stabilimenti() {
                 </div>
                 <div class="row mb-3">
                   {/* <label for="exampleFormControlInput1" class="form-label">Data</label> */}
-                  <label for="colFormLabel" class="col-sm-4 col-form-label">Seleziona la Data</label>
+                  <label htmlFor="colFormLabel" class="col-sm-4 col-form-label">Seleziona la Data</label>
                   <div class="col-md-4">
                     {/* <input className="form-control" type="date" id="start" name="trip-start"
                       value={initialDate} 

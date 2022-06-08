@@ -30,9 +30,10 @@ export default function Mappa() {
   const [selectedDate, setSelectedDate] = useState(sDate);
   const [value, onChange] = useState(new Date(sDate));
 
-  const today = formatDate(new Date());
+  // const today = formatDate(new Date());
 
-  const items = {};
+  // const items = {};
+  let stabName = '';
 
   /* {
         "id": 6,
@@ -51,6 +52,7 @@ export default function Mappa() {
         const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + id);
 
         setStabilimento(result.data);
+        stabName = stabilimento.name;
 
       } catch (error) {
         
@@ -90,7 +92,7 @@ export default function Mappa() {
     // };
 
     // setData();
-  }, [stabilimentoId, selectedDate]);// in teoria se cambio uno dei due valori -> esegue useEffect
+  }, [stabilimentoId, value]);// in teoria se cambio uno dei due valori -> esegue useEffect
 
   // metodo che permette di aggiornare i posti scelti dall'utente
   const onClickData = (seat) => {
@@ -125,6 +127,8 @@ export default function Mappa() {
     );
 
     console.log(totalPrice);
+    console.log(value);
+    // let dataPrenotazione = formatDate(value);
 
     // qua sarebbe interessante un modal o una pagina a parte per il checkout
     let msg = 'Conferma la prenotazione dei posti: ' +
@@ -137,12 +141,14 @@ export default function Mappa() {
         "stabilimentoID": stabilimentoId,
         "listaPostiPrenotati": reservedIds,
         "totalPrice": totalPrice,
-        "date": selectedDate 
+        "date": value 
       })
         .then(function (response) {
           console.log(response);
           alert("Prenotazione andata a buon fine");
-          navigate("/stabilimenti" + location.search);
+          sessionStorage.setItem('selectedDate', new Date());
+          // navigate("/stabilimenti" + location.search);
+          navigate("/stabilimenti");
         })
         .catch(function (error) {
           console.log(error);
@@ -152,17 +158,17 @@ export default function Mappa() {
 
   }
 
-  function setDate(e) {
-    // console.log(e.target.value);
+  // function setDate(e) {
+  //   // console.log(e.target.value);
 
-    // const date = e.target.value;
+  //   // const date = e.target.value;
 
-    // let newDate = new Date();
-    // console.log(date);
-    setSelectedDate(e);
-    console.log(selectedDate);
-    sessionStorage.setItem('selectedDate', e);
-  }
+  //   // let newDate = new Date();
+  //   // console.log(date);
+  //   setSelectedDate(e);
+  //   console.log(selectedDate);
+  //   sessionStorage.setItem('selectedDate', e);
+  // }
 
   function handleDateSelection(date) {
     console.log('handleDateSelection: ' + date)
@@ -197,7 +203,7 @@ export default function Mappa() {
               <div class="col-xl-6">
                 <div class="text-center text-white">
                   <div class="row mb-3">
-                    <label for="colFormLabel" class="col-sm-4 col-form-label">Data</label>
+                    <label htmlFor="colFormLabel" class="col-sm-4 col-form-label">Data</label>
                     <div class="col-md-4">
                       {/* <input className="form-control" type="date" id="start" name="trip-start"
                         value={selectedDate}
@@ -250,7 +256,7 @@ export default function Mappa() {
           </div>
         </section>
       </div>
-      <div class="modal fade" id="checkoutModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+      <div class="modal fade" id="checkoutModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabIndex="-1">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
@@ -281,20 +287,20 @@ export default function Mappa() {
                       <h4 class="mb-4">Riepilogo</h4>
                       <div class="row gy-3">
                         <div class="row mb-3">
-                          <label for="colFormLabel" class="col-sm-2 col-form-label">Data:</label>
+                          <label htmlFor="colFormLabel" class="col-sm-2 col-form-label">Data:</label>
                           <div class="col-md-3">
-                            <input type="text" readonly class="form-control-plaintext" id="riepData" value={formatDate(selectedDate)} />
+                            <input type="text" readOnly class="form-control-plaintext" id="riepData" value={formatDate(value)} />
                           </div>
                           <div>
-                            <Calendar value={new Date(selectedDate)}/>
+                            <Calendar value={new Date(value)}/>
                           </div>
                         </div>
 
                         <div class="row">
                           {/* la col-lg-2 fa si che si sovrappongono le scritte in alcune misure di finestra */}
-                          <label for="colFormLabel" class="col-sm-3 col-md-3 col-lg-2 col-form-label">Stabilimento:</label>
+                          <label htmlFor="colFormLabel" class="col-sm-3 col-md-3 col-lg-2 col-form-label">Stabilimento:</label>
                           <div class="col-sm-10">
-                            <input type="text" readonly class="form-control-plaintext" id="riepStab" value={stabilimento.name} />
+                            <input type="text" readOnly class="form-control-plaintext" id="riepStab" value={stabName} />
                           </div>
                         </div>
                       </div>
@@ -302,10 +308,10 @@ export default function Mappa() {
                       <hr class="my-4"></hr>
 
                       <h4 class="mb-3">Dati per la Fatturazione</h4>
-                      <form class="needs-validation" novalidate>
+                      <form class="needs-validation" noValidate>
                         <div class="row g-3">
                           <div class="col-sm-6">
-                            <label for="firstName" class="form-label">Nome</label>
+                            <label htmlFor="firstName" class="form-label">Nome</label>
                             {/* <input type="text" class="form-control" id="firstName" placeholder="" value="" required /> */}
                             <input type="text" class="form-control" id="firstName" placeholder="" required />
                               <div class="invalid-feedback">
@@ -314,7 +320,7 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-sm-6">
-                            <label for="lastName" class="form-label">Cognome</label>
+                            <label htmlFor="lastName" class="form-label">Cognome</label>
                             {/* <input type="text" class="form-control" id="lastName" placeholder="" value="" required /> */}
                             <input type="text" class="form-control" id="lastName" placeholder="" required />
                               <div class="invalid-feedback">
@@ -323,7 +329,7 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-12">
-                            <label for="username" class="form-label">Username</label>
+                            <label htmlFor="username" class="form-label">Username</label>
                             <div class="input-group has-validation">
                               <span class="input-group-text">@</span>
                               <input type="text" class="form-control" id="username" placeholder="Username" required />
@@ -334,7 +340,7 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-12">
-                            <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
+                            <label htmlFor="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
                             <input type="email" class="form-control" id="email" placeholder="you@example.com" />
                               <div class="invalid-feedback">
                                 Please enter a valid email address for shipping updates.
@@ -342,7 +348,7 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-12">
-                            <label for="address" class="form-label">Indirizzo</label>
+                            <label htmlFor="address" class="form-label">Indirizzo</label>
                             <input type="text" class="form-control" id="address" placeholder="1234 Main St" required />
                               <div class="invalid-feedback">
                                 Please enter your shipping address.
@@ -350,12 +356,12 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-12">
-                            <label for="address2" class="form-label">Indirizzo 2 <span class="text-muted">(Optional)</span></label>
+                            <label htmlFor="address2" class="form-label">Indirizzo 2 <span class="text-muted">(Optional)</span></label>
                             <input type="text" class="form-control" id="address2" placeholder="Apartment or suite" />
                           </div>
 
                           <div class="col-md-5">
-                            <label for="country" class="form-label">Nazione</label>
+                            <label htmlFor="country" class="form-label">Nazione</label>
                             <select class="form-select" id="country" required>
                               <option value="">Scegli...</option>
                               <option>Italia</option>
@@ -366,7 +372,7 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-md-4">
-                            <label for="state" class="form-label">Provincia</label>
+                            <label htmlFor="state" class="form-label">Provincia</label>
                             <select class="form-select" id="state" required>
                               <option value="">Scegli...</option>
                               <option>Cuneo</option>
@@ -377,7 +383,7 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-md-3">
-                            <label for="zip" class="form-label">CAP</label>
+                            <label htmlFor="zip" class="form-label">CAP</label>
                             <input type="text" class="form-control" id="zip" placeholder="" required />
                               <div class="invalid-feedback">
                                 Zip code required.
@@ -389,12 +395,12 @@ export default function Mappa() {
 
                         <div class="form-check">
                           <input type="checkbox" class="form-check-input" id="same-address" />
-                            <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
+                            <label class="form-check-label" htmlFor="same-address">Shipping address is the same as my billing address</label>
                         </div>
 
                         <div class="form-check">
                           <input type="checkbox" class="form-check-input" id="save-info" />
-                            <label class="form-check-label" for="save-info">Save this information for next time</label>
+                            <label class="form-check-label" htmlFor="save-info">Save this information for next time</label>
                         </div>
 
                         <hr class="my-4"></hr>
@@ -403,22 +409,22 @@ export default function Mappa() {
 
                         <div class="my-3">
                           <div class="form-check">
-                            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required />
-                              <label class="form-check-label" for="credit">Carta di Credito</label>
+                            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" defaultChecked required />
+                              <label class="form-check-label" htmlFor="credit">Carta di Credito</label>
                           </div>
                           <div class="form-check">
                             <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required />
-                              <label class="form-check-label" for="debit">Satispay</label>
+                              <label class="form-check-label" htmlFor="debit">Satispay</label>
                           </div>
                           <div class="form-check">
                             <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required />
-                              <label class="form-check-label" for="paypal">PayPal</label>
+                              <label class="form-check-label" htmlFor="paypal">PayPal</label>
                           </div>
                         </div>
 
                         <div class="row gy-3">
                           <div class="col-md-6">
-                            <label for="cc-name" class="form-label">Nome sulla Carta</label>
+                            <label htmlFor="cc-name" class="form-label">Nome sulla Carta</label>
                             <input type="text" class="form-control" id="cc-name" placeholder="" required />
                               <small class="text-muted">Full name as displayed on card</small>
                               <div class="invalid-feedback">
@@ -427,7 +433,7 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-md-6">
-                            <label for="cc-number" class="form-label">Numero della carta di credito</label>
+                            <label htmlFor="cc-number" class="form-label">Numero della carta di credito</label>
                             <input type="text" class="form-control" id="cc-number" placeholder="" required />
                               <div class="invalid-feedback">
                                 Credit card number is required
@@ -435,7 +441,7 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-md-3">
-                            <label for="cc-expiration" class="form-label">Data di Scadenza</label>
+                            <label htmlFor="cc-expiration" class="form-label">Data di Scadenza</label>
                             <input type="text" class="form-control" id="cc-expiration" placeholder="" required />
                               <div class="invalid-feedback">
                                 Expiration date required
@@ -443,7 +449,7 @@ export default function Mappa() {
                           </div>
 
                           <div class="col-md-3">
-                            <label for="cc-cvv" class="form-label">CVV</label>
+                            <label htmlFor="cc-cvv" class="form-label">CVV</label>
                             <input type="text" class="form-control" id="cc-cvv" placeholder="" required />
                               <div class="invalid-feedback">
                                 Security code required
@@ -463,14 +469,14 @@ export default function Mappa() {
               
             </div>
             <div class="modal-footer">
-              <button class="btn btn-primary"
+              <button class="btn btn-primary" data-bs-dismiss="modal"
                 // data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
                 onClick={handlePrenotaSubmit}>Conferma</button>
             </div>
           </div>
         </div>
       </div>
-      <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+      <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex="-1">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
