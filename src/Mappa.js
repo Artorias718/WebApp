@@ -58,7 +58,9 @@ export default function Mappa() {
       // setIsLoading(true);
 
       try {
-        const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + stabilimentoId + '/lista_Posti');
+        let selectedDate = formatDate(mydate);
+        console.log(selectedDate);
+        const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + stabilimentoId + '/lista_Posti/' + selectedDate);
 
         setSeat(result.data);
         setSeatAvailable(result.data.filter(s => s.booked === false));
@@ -91,7 +93,7 @@ export default function Mappa() {
 
   // metodo che permette di aggiornare i posti scelti dall'utente
   const onClickData = (seat) => {
-    if (seat.booked) {
+    if (seat.isBooked) {
       alert('Posto: ' + seat.id + ' non disponibile!');
     }
     else {
@@ -473,7 +475,7 @@ function DrawGrid({ seat, available, reserved, onClickData }) {
         {seat.map(s =>
           <div
             className={
-              s.booked ? 'booked' :
+              s.isBooked ? 'booked' :
                 reserved.findIndex((element) => element.id === s.id) > -1 ? 'reserved' : 'available'
               // si capirebbe meglio se fossi cosi ma non riesco a far funzionare
               // () => {
@@ -601,5 +603,5 @@ function formatDate(date) {
   if (day.length < 2)
     day = '0' + day;
 
-  return [day, month, year].join('/');
+  return [year, month, day].join('-');
 }
