@@ -586,13 +586,6 @@ function Cart({ reserved }) {
           <strong>€{total}</strong>
         </li>
       </ul>
-
-      {/* <div className="right">
-        <h4>Stai prenotando: ({reserved.length})</h4>
-        <ul>
-          {reserved.map(res => <li key={res.id} >{res.id} - €: {res.price}</li>)}
-        </ul>
-      </div> */}
     </>
   )
 }
