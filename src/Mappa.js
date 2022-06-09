@@ -27,7 +27,7 @@ export default function Mappa() {
   // Get saved data from sessionStorage
   let sDate = sessionStorage.getItem('selectedDate');
   console.log(sDate);
-  const [value, onChange] = useState(new Date(sDate));
+  const [mydate, setMydate] = useState(new Date(sDate));
 
   let stabName = '';
 
@@ -48,7 +48,6 @@ export default function Mappa() {
         const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + id);
 
         setStabilimento(result.data);
-        stabName = stabilimento.name;
 
       } catch (error) {
         
@@ -88,7 +87,7 @@ export default function Mappa() {
     // };
 
     // setData();
-  }, [stabilimentoId, value]);// in teoria se cambio uno dei due valori -> esegue useEffect
+  }, [stabilimentoId, mydate]);// in teoria se cambio uno dei due valori -> esegue useEffect
 
   // metodo che permette di aggiornare i posti scelti dall'utente
   const onClickData = (seat) => {
@@ -121,7 +120,7 @@ export default function Mappa() {
     );
 
     console.log(totalPrice);
-    console.log(value);
+    console.log(mydate);
 
     // qua sarebbe interessante un modal o una pagina a parte per il checkout
     let msg = 'Conferma la prenotazione dei posti: ' +
@@ -134,7 +133,7 @@ export default function Mappa() {
         "stabilimentoID": stabilimentoId,
         "listaPostiPrenotati": reservedIds,
         "totalPrice": totalPrice,
-        "date": value 
+        "date": mydate 
       })
         .then(function (response) {
           console.log(response);
@@ -150,13 +149,13 @@ export default function Mappa() {
 
   }
 
-
-
   function handleDateSelection(date) {
     console.log('handleDateSelection: ' + date)
-    onChange(date);
+    setMydate(date);
     sessionStorage.setItem('selectedDate', date);
   }
+
+  stabName = stabilimento.name;
 
   return (
     <>
@@ -190,7 +189,7 @@ export default function Mappa() {
                       <div>
                         <DatePicker className='form-control'
                           onChange={handleDateSelection}
-                          value={value}
+                          value={mydate}
                           format={"dd/MM/yyyy"}
                           minDate={new Date()} />
                       </div>
@@ -256,10 +255,10 @@ export default function Mappa() {
                         <div class="row mb-3">
                           <label htmlFor="colFormLabel" class="col-sm-2 col-form-label">Data:</label>
                           <div class="col-md-3">
-                            <input type="text" readOnly class="form-control-plaintext" id="riepData" value={formatDate(value)} />
+                            <input type="text" readOnly class="form-control-plaintext" id="riepData" value={formatDate(mydate)} />
                           </div>
                           <div>
-                            <Calendar value={new Date(value)}/>
+                            <Calendar value={new Date(mydate)}/>
                           </div>
                         </div>
 
