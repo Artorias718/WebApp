@@ -6,48 +6,31 @@ import {
   useLocation
 } from "react-router-dom";
 import axios from 'axios';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css'
-// import logo from '../logo.svg';
 import '../css/stabilimenti.css';
-// import DateTime from '../utils/DateTime.js'
 import '../css/myDatePicker.css'
 
 export default function Stabilimenti() {
   let [searchParams, setSearchParams] = useSearchParams();
   
+  // recupero la data della sessionStorage, per il caso quando si torna 
+  // indietro della pagina del dettaglio dello stabilimento
   let sDate = sessionStorage.getItem('selectedDate');
-  console.log('session storage: ' + sDate);
+  // console.log('session storage: ' + sDate);
   if (sDate === null) {
-    sDate = new Date;
+    sDate = new Date();
     sessionStorage.setItem('selectedDate', sDate);
   }
   
   const [stabilimenti, setStabilimenti] = useState([]);
-  const [mydate, setMydate] = useState(new Date(sDate));
   const [value, onChange] = useState(new Date(sDate));
 
   const API_KEY = 'AIzaSyAk5gXXtzL3bDr--V7jI71K42Bb1Yp7fwY'
 
-  const date = new Date();
-  // console.log('to locale: ' + date.toLocaleDateString('it-IT'));
-  // const event = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
-  // const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  // const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-
-  // console.log(date.toLocaleDateString('it-IT', options));
-
-  let today = formatDate(date);
-  // console.log(today);
-
-  // const data = new Date().toLocaleDateString('it-IT');
-  // console.log(data);
-
-  const [initialDate, setInitialDate] = useState(sDate);
-
   useEffect(() => {
+    // console.log('runned useEffect stabilimentiList');
     const fetchData = async () => {
 
       try {
@@ -62,76 +45,7 @@ export default function Stabilimenti() {
     };
 
     fetchData();
-
-    const setData = () => {
-      let stabilimentiList = [
-        {
-          "id": 1,
-          "name": "Bagni Liguria",
-          "rowQty": 3,
-          "columnQty": 4,
-          "address": "Viale Rimembranza, 38, 16039 Sestri Levante GE",
-          "phoneNumber": "0185 482131",
-          "spotsNumber": 12
-        },
-        {
-          "id": 2,
-          "name": "Bagni Castelletto",
-          "rowQty": 2,
-          "columnQty": 5,
-          "address": "Via Aurelia, 17024 Finale Ligure SV",
-          "phoneNumber": "019 600106",
-          "spotsNumber": 10
-        },
-        {
-          "id": 3,
-          "name": "Capo Torre Beach & Lounge",
-          "rowQty": 5,
-          "columnQty": 3,
-          "address": "Via Aurelia di Ponente, 1, 17015 Celle Ligure SV",
-          "phoneNumber": "019 221 6264",
-          "spotsNumber": 15
-        },
-        {
-          "id": 4,
-          "name": "Bagni Vittoria Beach",
-          "rowQty": 4,
-          "columnQty": 5,
-          "address": "Lungomare Augusto Migliorini, 17024 Finale Ligure SV",
-          "phoneNumber": "019 695583",
-          "spotsNumber": 20
-        },
-        {
-          "id": 5,
-          "name": "Bagni Al Saraceno",
-          "rowQty": 2,
-          "columnQty": 7,
-          "address": "Via del Capo, 2, 17024 Finale ligure SV",
-          "phoneNumber": "019 698 8187",
-          "spotsNumber": 14
-        }
-      ];
-      setStabilimenti(stabilimentiList);
-    };
-
-    // setData();
   }, [value]);
-
-  // Save data to sessionStorage
-  // sessionStorage.setItem('key', 'value');
-
-  // Get saved data from sessionStorage
-  // let data = sessionStorage.getItem('key');
-  // console.log(data);
-
-  function setDate(e) {
-    e.preventDefault();
-    let selectedDate = e.target.value;
-    console.log('selected date: ' + selectedDate);
-    setInitialDate(selectedDate);
-    console.log('initial date: ' + initialDate);
-    sessionStorage.setItem('selectedDate', selectedDate);
-  }
 
   function handleDateSelection(date) {
     console.log('handleDateSelection: ' + date)
@@ -149,7 +63,6 @@ export default function Stabilimenti() {
                 <h1 class="mb-5">Le migliori spiaggie a un click!</h1>
                 <div class="row mb-3">
                   <div class="col">
-                    {/* <input class="form-control form-control-lg" id="emailAddress" placeholder="Search location" /> */}
                     <input
                       className="form-control form-control-lg"
                       placeholder="Dove vuoi andare?"
@@ -164,21 +77,18 @@ export default function Stabilimenti() {
                       }}
                     />
                   </div>
-                  {/* <div class="col-auto"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">Submit</button></div> */}
                 </div>
                 <div class="row mb-3">
-                  {/* <label for="exampleFormControlInput1" class="form-label">Data</label> */}
                   <label htmlFor="colFormLabel" class="col-sm-4 col-form-label">Seleziona la Data</label>
                   <div class="col-md-4">
-                    {/* <input className="form-control" type="date" id="start" name="trip-start"
-                      value={initialDate} 
-                      onChange={setDate}
-                      min={today} /> */}
                     <div>
-                      <DatePicker className='form-control' onChange={handleDateSelection} value={value} format={"dd/MM/yyyy"} />
+                      <DatePicker className='form-control'
+                        onChange={handleDateSelection}
+                        value={value}
+                        format={"dd/MM/yyyy"}
+                        minDate={new Date()} />
                     </div>
                   </div>
-                  {/* <Calendar onChange={setMydate} value={mydate} /> */}
                   <div>
                   </div>
                 </div>
@@ -202,7 +112,7 @@ export default function Stabilimenti() {
               })
               .map((stabilimento) => (
                 <div class="col mb-5" key={stabilimento.id}>
-                  <div class="card h-100">
+                  <div class="stabCard h-100">
                     {/* <!-- Sale badge--> */}
                     <div class="badge bg-dark text-white position-absolute" style={{ top: '0.5rem', right: '0.5rem' }}>Sale</div>
                     {/* <!-- Product image--> */}
@@ -223,11 +133,6 @@ export default function Stabilimenti() {
                           <span style={{ marginRight: "5px", color: "#70757a", whiteSpace: "nowrap" }}
                           >{stabilimento.rating > 0 ? stabilimento.rating : ''}</span>
                           <ReviewStars rating={stabilimento.rating} />
-                          {/* <div class="bi-star-fill"></div>
-                          <div class="bi-star-fill"></div>
-                          <div class="bi-star-fill"></div>
-                          <div class="bi-star-fill"></div>
-                          <div class="bi-star-fill"></div> */}
                         </div>
                         {/* <!-- Product price--> */}
                         <span class="text-muted text-decoration-line-through">$40.00</span>
@@ -244,7 +149,6 @@ export default function Stabilimenti() {
                         >
                           View options
                         </QueryNavLink>
-                        {/* <a class="btn btn-outline-dark mt-auto" href="#">View options</a> */}
                       </div>
                     </div>
                   </div>
@@ -265,7 +169,6 @@ function QueryNavLink({ to, ...props }) {
 
 function ReviewStars({ rating }) {
   let integerPart = Math.trunc(rating);
-  // console.log(integerPart);
   let stars = new Array(integerPart);
 
   for (let i = 0; i < integerPart; i++) {
@@ -273,7 +176,6 @@ function ReviewStars({ rating }) {
   }
   
   let decimalpart = (rating * 10) % 10;
-  // console.log('Decimal: ' + decimalpart);
 
   return(
     <>
@@ -286,27 +188,4 @@ function ReviewStars({ rating }) {
       
     </>
   )
-
-}
-
-function star() {
-  return(
-    <div class="bi-star-fill"></div>
-  )
-}
-
-
-function formatDate(date) {
-  var d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
-
-  if (month.length < 2)
-    month = '0' + month;
-  if (day.length < 2)
-    day = '0' + day;
-
-  return [day, month, year].join('/');
-  //return [year, month, day].join('/');
 }

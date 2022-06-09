@@ -27,12 +27,8 @@ export default function Mappa() {
   // Get saved data from sessionStorage
   let sDate = sessionStorage.getItem('selectedDate');
   console.log(sDate);
-  const [selectedDate, setSelectedDate] = useState(sDate);
   const [value, onChange] = useState(new Date(sDate));
 
-  // const today = formatDate(new Date());
-
-  // const items = {};
   let stabName = '';
 
   /* {
@@ -113,8 +109,6 @@ export default function Mappa() {
   // metodo handle per conferma/prenota
   function handlePrenotaSubmit(e) {
     e.preventDefault();
-    // console.log('You clicked submit.');
-    // console.log('stabilimentoID: ' + stabilimentoId);
     console.log(seatReserved);
     let reservedIds = seatReserved.map(s => s.id);
     console.log(reservedIds);
@@ -128,7 +122,6 @@ export default function Mappa() {
 
     console.log(totalPrice);
     console.log(value);
-    // let dataPrenotazione = formatDate(value);
 
     // qua sarebbe interessante un modal o una pagina a parte per il checkout
     let msg = 'Conferma la prenotazione dei posti: ' +
@@ -147,8 +140,7 @@ export default function Mappa() {
           console.log(response);
           alert("Prenotazione andata a buon fine");
           sessionStorage.setItem('selectedDate', new Date());
-          // navigate("/stabilimenti" + location.search);
-          navigate("/stabilimenti");
+          navigate("/stabilimenti" + location.search);
         })
         .catch(function (error) {
           console.log(error);
@@ -158,17 +150,7 @@ export default function Mappa() {
 
   }
 
-  // function setDate(e) {
-  //   // console.log(e.target.value);
 
-  //   // const date = e.target.value;
-
-  //   // let newDate = new Date();
-  //   // console.log(date);
-  //   setSelectedDate(e);
-  //   console.log(selectedDate);
-  //   sessionStorage.setItem('selectedDate', e);
-  // }
 
   function handleDateSelection(date) {
     console.log('handleDateSelection: ' + date)
@@ -205,12 +187,12 @@ export default function Mappa() {
                   <div class="row mb-3">
                     <label htmlFor="colFormLabel" class="col-sm-4 col-form-label">Data</label>
                     <div class="col-md-4">
-                      {/* <input className="form-control" type="date" id="start" name="trip-start"
-                        value={selectedDate}
-                        onChange={setDate}
-                        min={today} /> */}
                       <div>
-                        <DatePicker className='form-control' onChange={handleDateSelection} value={value} format={"dd/MM/yyyy"} />
+                        <DatePicker className='form-control'
+                          onChange={handleDateSelection}
+                          value={value}
+                          format={"dd/MM/yyyy"}
+                          minDate={new Date()} />
                       </div>
                     </div>
                   </div>
@@ -237,19 +219,10 @@ export default function Mappa() {
                   <button class="btn btn-light" type="button"
                     onClick={(e) => {
                       e.preventDefault();
-                      // deleteInvoice(invoice.number);
                       navigate("/stabilimenti" + location.search);
                     }}
                   >Back</button>
                   <a class="btn btn-primary" data-bs-toggle="modal" href="#checkoutModalToggle" role="button">Prenota</a>
-                  {/* <button class="btn btn-primary me-md-2" type="button"
-                    onClick={handleSubmit
-                      // () => {
-                      // deleteInvoice(invoice.number);
-                      // navigate("/invoices" + location.search);
-                      // }
-                    }
-                  >Prenota</button> */}
                 </div>
               </div>
             </div>
@@ -266,12 +239,6 @@ export default function Mappa() {
             <div class="modal-body">
               <div class="container">
                 <main>
-                  {/* <div class="py-5 text-center">
-                    <img class="d-block mx-auto mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57" />
-                      <h2>Checkout</h2>
-                      <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
-                  </div> */}
-
                   <div class="row g-5">
                     <div class="col-md-5 col-lg-4 order-md-last">
                       <Cart reserved={seatReserved} />
@@ -312,7 +279,6 @@ export default function Mappa() {
                         <div class="row g-3">
                           <div class="col-sm-6">
                             <label htmlFor="firstName" class="form-label">Nome</label>
-                            {/* <input type="text" class="form-control" id="firstName" placeholder="" value="" required /> */}
                             <input type="text" class="form-control" id="firstName" placeholder="" required />
                               <div class="invalid-feedback">
                                 Valid first name is required.
@@ -321,7 +287,6 @@ export default function Mappa() {
 
                           <div class="col-sm-6">
                             <label htmlFor="lastName" class="form-label">Cognome</label>
-                            {/* <input type="text" class="form-control" id="lastName" placeholder="" value="" required /> */}
                             <input type="text" class="form-control" id="lastName" placeholder="" required />
                               <div class="invalid-feedback">
                                 Valid last name is required.
@@ -457,9 +422,6 @@ export default function Mappa() {
                           </div>
                         </div>
 
-                        {/* <hr class="my-4"></hr>
-
-                        <button class="w-100 btn btn-primary btn-lg" type="submit">Conferma</button> */}
                       </form>
                     </div>
                   </div>
@@ -484,6 +446,9 @@ export default function Mappa() {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+              {/* qua se uso il sistema degli modal devo cambiare il messaggio del secondo modal
+              in modo che mi faccia vedere l'esito della prenotazione o avere due modal e mostrare quello
+              secondo l'esito */}
               <p>Prenotazione andata a buon fine.</p>
               <p>Le arrivera' una mail di conferma al piu' presto.</p>
             </div>
@@ -511,6 +476,7 @@ function DrawGrid({ seat, available, reserved, onClickData }) {
             className={
               s.booked ? 'booked' :
                 reserved.findIndex((element) => element.id === s.id) > -1 ? 'reserved' : 'available'
+              // si capirebbe meglio se fossi cosi ma non riesco a far funzionare
               // () => {
               //   // return reserved.findIndex((element) => element.id === row.id) > -1? 'reserved': 'available';
               //   if (row.booked) {
@@ -528,7 +494,7 @@ function DrawGrid({ seat, available, reserved, onClickData }) {
         )}
       </div>
 
-      {/* <AvailableList available={available} /> */}
+      {/* <AvailableList available={available} /> non faccio vedere la lista di posti disponibili */}
       <ReservedList reserved={reserved} />
     </div>
   )
@@ -549,12 +515,36 @@ function AvailableList({ available }) {
 }
 
 function ReservedList({ reserved }) {
+  // posso calcolare il totale anche qua
+  let initialValue = 0;
+  let totalPrice = reserved.reduce(
+    (previousValue, currentValue) => previousValue + currentValue.price,
+    initialValue
+  );
+
+  let total = Number.parseFloat(totalPrice).toFixed(2);
+
   return (
-    <div className="right">
-      <h4>Stai prenotando: ({reserved.length})</h4>
-      <ul>
-        {reserved.map(res => <li key={res.id} >{res.id} - €: {res.price}</li>)}
-      </ul>
+    <div className="row justify-content-center">
+      <div className="col-8">
+        <h4 className="p-4">Stai prenotando: ({reserved.length})</h4>
+        <ul class="list-group mb-3">
+          {reserved.map(res =>
+            <li class="list-group-item d-flex justify-content-between lh-sm mb-2"
+              key={res.id} >
+              <span>Posto {res.id}</span>
+              <strong>€{res.price}</strong>
+            </li>
+            )}
+        </ul>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <span>Totale (EUR):</span>
+          <strong>€{total}</strong>
+        </div>
+
+      </div>
+
     </div>
   )
 }
