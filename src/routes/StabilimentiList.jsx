@@ -25,7 +25,7 @@ export default function Stabilimenti() {
   }
   
   const [stabilimenti, setStabilimenti] = useState([]);
-  const [value, onChange] = useState(new Date(sDate));
+  const [mydate, setMydate] = useState(new Date(sDate));
 
   const API_KEY = 'AIzaSyAk5gXXtzL3bDr--V7jI71K42Bb1Yp7fwY'
 
@@ -45,11 +45,13 @@ export default function Stabilimenti() {
     };
 
     fetchData();
-  }, [value]);
+  }, [mydate]); // posso togliere mydate per fire useEffect intanto non
+  // viene considerato nella request per la lista di stabilimenti -> next reale
+  // ritorno dal backend soltanto gli stabilimento con disponibilita per la data scelta
 
   function handleDateSelection(date) {
     console.log('handleDateSelection: ' + date)
-    onChange(date);
+    setMydate(date);
     sessionStorage.setItem('selectedDate', date);
   }
 
@@ -84,7 +86,7 @@ export default function Stabilimenti() {
                     <div>
                       <DatePicker className='form-control'
                         onChange={handleDateSelection}
-                        value={value}
+                        value={mydate}
                         format={"dd/MM/yyyy"}
                         minDate={new Date()} />
                     </div>
