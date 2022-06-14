@@ -1,0 +1,66 @@
+.login-container {
+    text-align: center;
+}
+
+
+.login-content {
+    background: #fff;
+    box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
+    border-radius: 2px;
+    width: 500px;
+    display: inline-block;
+    margin-top: 30px;
+    vertical-align: middle;
+    position: relative;    
+    padding: 35px;
+    letter-spacing: 1px;
+
+
+}
+
+.social-btn {
+
+    width:100%;
+    margin: 10px auto;
+    margin-bottom: 0px;
+    font-weight: 400;
+    font-size: 18px;
+    border: 1px solid rgb(60, 90, 154);
+}
+
+.social-btn img {
+    height: 40px;
+    float: left;
+}
+
+.social-btn.google img{
+    margin-top: 7px;
+    height: 50px;
+    margin-bottom: -5px;
+    margin-top: -5px;
+
+
+}
+
+.social-btn.facebook img {
+    height: 40px;
+    margin-left: 3px;
+}
+
+.social-btn.github img {
+    height: 40px;
+    margin-left: 3px;
+}
+
+.signup-link {
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+}
+
+.login-title {
+    font-size: 1.5em;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 30px;
+    color: rgba(0, 0, 0, 0.65);
+}

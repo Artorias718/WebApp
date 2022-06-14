@@ -13,6 +13,13 @@ export default function App() {
                   <li className="nav-item"><Link className="nav-link active" to="/">Home</Link></li>
                   <li className="nav-item"><Link className="nav-link" to="/stabilimenti">Stabilimenti</Link></li>
                   <li className="nav-item"><Link className="nav-link" to="/expenses">Gestione</Link></li>
+                  {localStorage.isAuth ?
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                      <li className="nav-item"><Link className="nav-link" to="/profile">Profile</Link></li>
+                      <li className="nav-item"><Link className="nav-link" to="/logout">Logout</Link></li>
+                    </ul>
+                    :
+                    <li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>}
               </ul>
           </div>
         </div>

@@ -15,6 +15,10 @@ import Expenses from "./routes/expenses";
 import Stabilimenti from "./routes/stabilimenti"
 import StabilimentiList from "./routes/StabilimentiList"
 // import Invoice from "./routes/invoice";
+import Login from "./routes/login";
+import Profile from "./profile/Profile";
+import OAuth2RedirectHandler from './profile/OAuth2RedirectHandler';
+import LogoutHandler from "./profile/LogoutHandler";
 
 // const rootElement = document.getElementById("root");
 const container = document.getElementById('app');
@@ -29,6 +33,10 @@ root.render(
           <Route path=":stabilimentoId" element={<Mappa />} />
           <Route index element={<StabilimentiList />} />
         </Route>
+        <Route path="login" element={<Login />} />
+        <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="logout" element={<LogoutHandler />} />
         <Route
           path="*"
           element={

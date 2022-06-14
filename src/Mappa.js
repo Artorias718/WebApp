@@ -141,7 +141,7 @@ export default function Mappa() {
           console.log(response);
           alert("Prenotazione andata a buon fine");
           sessionStorage.setItem('selectedDate', new Date());
-          navigate("/stabilimenti" + location.search);
+          // navigate("/stabilimenti" + location.search);
         })
         .catch(function (error) {
           console.log(error);
