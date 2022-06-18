@@ -110,45 +110,57 @@ export default function Mappa() {
   // metodo handle per conferma/prenota
   function handlePrenotaSubmit(e) {
     e.preventDefault();
-    console.log(seatReserved);
-    let reservedIds = seatReserved.map(s => s.id);
-    console.log(reservedIds);
+    
+    // recupero i dati dell'utente
+    const isAuth = localStorage.getItem('isAuth');
+    console.log('isAuth: ' + isAuth);
+    if (isAuth) {
+      const userEmail = localStorage.getItem('email');
+      console.log('user email: ' + userEmail);
+      console.log(seatReserved);
+      let reservedIds = seatReserved.map(s => s.id);
+      console.log(reservedIds);
 
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce#sum_of_values_in_an_object_array
-    let initialValue = 0;
-    let totalPrice = seatReserved.reduce(
-      (previousValue, currentValue) => previousValue + currentValue.price,
-      initialValue
-    );
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce#sum_of_values_in_an_object_array
+      let initialValue = 0;
+      let totalPrice = seatReserved.reduce(
+        (previousValue, currentValue) => previousValue + currentValue.price,
+        initialValue
+      );
 
-    console.log(totalPrice);
-    console.log(mydate);
+      console.log(totalPrice);
+      console.log(mydate);
 
-    // qua sarebbe interessante un modal o una pagina a parte per il checkout
-    let msg = 'Conferma la prenotazione dei posti: ' +
-      seatReserved.map(s => '\n\tPosto: ' + s.id + ' - prezzo: € ' + s.price) +
-      '\nPrezzo totale: €' + totalPrice;
-    if (window.confirm(msg)) {
-      // alert("exit.html", "Thanks for Visiting!");
-      // faccio la post con stabilimentoId, reservedSeatsId, totalPrice
-      axios.post('http://localhost:7500/api/v2/prenotazioni/create', {
-        "stabilimentoID": stabilimentoId,
-        "listaPostiPrenotati": reservedIds,
-        "totalPrice": totalPrice,
-        "date": formatDate(mydate)
-      })
-        .then(function (response) {
-          console.log(response);
-          alert("Prenotazione andata a buon fine");
-          sessionStorage.setItem('selectedDate', new Date());
-          navigate("/stabilimenti" + location.search);
+      // qua sarebbe interessante un modal o una pagina a parte per il checkout
+      let msg = 'Conferma la prenotazione dei posti: ' +
+        seatReserved.map(s => '\n\tPosto: ' + s.id + ' - prezzo: € ' + s.price) +
+        '\nPrezzo totale: €' + totalPrice;
+      if (window.confirm(msg)) {
+        // alert("exit.html", "Thanks for Visiting!");
+        // faccio la post con stabilimentoId, reservedSeatsId, totalPrice
+        axios.post('http://localhost:7500/api/v2/prenotazioni/create', {
+          "stabilimentoID": stabilimentoId,
+          "listaPostiPrenotati": reservedIds,
+          "totalPrice": totalPrice,
+          "date": formatDate(mydate),
+          "userEmail": userEmail
         })
-        .catch(function (error) {
-          console.log(error);
-          alert(error);
-        });
+          .then(function (response) {
+            console.log(response);
+            alert("Prenotazione andata a buon fine");
+            sessionStorage.setItem('selectedDate', new Date());
+            navigate("/stabilimenti" + location.search);
+          })
+          .catch(function (error) {
+            console.log(error);
+            alert(error);
+          });
+      }
     }
-
+    else {
+      alert('Realizzare il login per poter prenotare!');
+      navigate('/login');
+    }
   }
 
   function handleDateSelection(date) {
