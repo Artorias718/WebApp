@@ -135,13 +135,13 @@ export default function Mappa() {
         "stabilimentoID": stabilimentoId,
         "listaPostiPrenotati": reservedIds,
         "totalPrice": totalPrice,
-        "date": mydate 
+        "date": formatDate(mydate)
       })
         .then(function (response) {
           console.log(response);
           alert("Prenotazione andata a buon fine");
           sessionStorage.setItem('selectedDate', new Date());
-          // navigate("/stabilimenti" + location.search);
+          navigate("/stabilimenti" + location.search);
         })
         .catch(function (error) {
           console.log(error);
