@@ -15,7 +15,8 @@ export default function OAuth2redirectHandler(){
 
     const navigate = useNavigate();
     React.useEffect(() => {
-            navigate('/profile');
+        navigate('/profile');
+        window.location.reload(); // perche i link della nav non stano cambiando bene
     });
 
     return null;

@@ -34,6 +34,7 @@ export default function LogoutHandler() {
     const navigate = useNavigate();
     React.useEffect(() => {
         navigate('/home');
+        window.location.reload(); // perche i link della nav non cambiano
     });
 
     return null;

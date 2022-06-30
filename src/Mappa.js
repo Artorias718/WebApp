@@ -479,7 +479,7 @@ export default function Mappa() {
 function DrawGrid({ seat, available, reserved, onClickData }) {
   const onClickSeat = (seat) => {
     onClickData(seat);
-  }
+  };
 
   return (
     <div className="mapContainer">
@@ -510,7 +510,7 @@ function DrawGrid({ seat, available, reserved, onClickData }) {
       {/* <AvailableList available={available} /> non faccio vedere la lista di posti disponibili */}
       <ReservedList reserved={reserved} />
     </div>
-  )
+  );
 
 }
 
