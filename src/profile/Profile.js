@@ -10,10 +10,11 @@ export default function Profile() {
   let userEmail = localStorage.email;
 
   const [reservationList, setReservationList] = useState([]);
+
   useEffect(() => {
     const fecthReservationList = async (email) => {
       try {
-        const result = await axios(bookingBaseURL + '/v2/lista_prenotazioni?email=' + email);
+        const result = await axios(bookingBaseURL + '/v2/lista_prenotazioni/email/' + email);
 
         setReservationList(result.data);
         //alert(result.data.length);
@@ -26,8 +27,31 @@ export default function Profile() {
     fecthReservationList(userEmail);
   }, [userEmail]);
 
-  const cancelReservation = (reservation) => {
+  const handleCancelReservation = (reservation) => {
     // chiedo conferma e poi faccio la chiamata all'entrypoint per la cancellazione
+    // alert(reservation.id);
+
+    let msg = 'Conferma la cancellazione della prenotazione \ndel giorno: ' + formatDate(reservation.date) +
+      reservation.listaPostiPrenotati.map(spot => '\n\tPosto: ' + spot) + '\n';
+    if (window.confirm(msg)) {
+      // send unbooking request and if return success
+      // remove the reservation from the reservationList
+      let cancelUrl = bookingBaseURL + '/v2/lista_prenotazioni/' + reservation.id +'/delete';
+      axios.delete(cancelUrl)
+        .then(function (response) {
+          // handle success
+          console.log(response);
+          setReservationList(reservationList.filter(item => item.id !== reservation.id));
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        })
+        .then(function () {
+          // always executed
+        });
+    }
+
   }
 
     return (
@@ -120,80 +144,66 @@ export default function Profile() {
           <h2 class="pb-2 border-bottom">Le mie prenotazioni</h2>
           <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
             {/* faccio il render della lista di prenotazioni */}
-            <PrenotazioneList reservations={reservationList}/>
-            <div class="col d-flex align-items-start">
-              <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-                {/* <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2" /></svg> */}
-                <svg class="bi" width="1em" height="1em"><use xlinkHref="#calendar3" /></svg>
-              </div>
-              <div>
-                <h2>Featured title</h2>
-                <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                <a href="#" class="btn btn-primary">
-                  Primary button
-                </a>
-              </div>
-            </div>
-            <div class="col d-flex align-items-start">
-              <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-                <svg class="bi" width="1em" height="1em"><use xlinkHref="#cpu-fill" /></svg>
-              </div>
-              <div>
-                <h2>Featured title</h2>
-                <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                <a href="#" class="btn btn-primary">
-                  Primary button
-                </a>
-              </div>
-            </div>
-            <div class="col d-flex align-items-start">
-              <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-                <svg class="bi" width="1em" height="1em"><use xlinkHref="#tools" /></svg>
-              </div>
-              <div>
-                <h2>Featured title</h2>
-                <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                <a href="#" class="btn btn-primary">
-                  Primary button
-                </a>
-              </div>
-            </div>
-            <div class="col d-flex align-items-start">
-              <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-                <svg class="bi" width="1em" height="1em"><use xlinkHref="#tools" /></svg>
-              </div>
-              <div>
-                <h2>Featured title</h2>
-                <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                <a href="#" class="btn btn-primary">
-                  Primary button
-                </a>
-              </div>
-            </div>
+            <PrenotazioneList reservations={reservationList}
+              onButtonClick={handleCancelReservation.bind(this)}
+            />
+            
           </div>
         </div>
       </>
   );
 }
 
-function PrenotazioneList({ reservations }) {
+function PrenotazioneList({ reservations, onButtonClick }) {
+  
+  const onClickCancel = (reservation) => {
+    onButtonClick(reservation);
+  };
+
   return (
     <>
       {reservations.map(reservation =>
-        <div class="col d-flex align-items-start">
+        <div class="col d-flex align-items-start" key={reservation.id}>
           <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
             {/* <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2" /></svg> */}
             <svg class="bi" width="1em" height="1em"><use xlinkHref="#calendar3" /></svg>
           </div>
           <div>
-            <h2>{reservation.date}</h2>
-            <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-            <a href="#" class="btn btn-primary">
-              Primary button
-            </a>
+            <h2>Data: {formatDate(reservation.date)}</h2>
+            <h6>Stabilimento: {reservation.stabilimentoID}</h6>
+            <p>Posti: </p>
+            <ul class="list-group mb-3">
+              {reservation.listaPostiPrenotati.map(spot =>
+                <li class="list-group-item d-flex justify-content-between lh-sm mb-2"
+                  key={spot} >
+                  <span>Posto: {spot}</span>
+                </li>
+              )}
+            </ul>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <span>Totale (EUR):</span>
+              <strong>€{Number.parseFloat(reservation.totalPrice).toFixed(2)}</strong>
+            </div>
+            <p></p>
+            {/* if reservation date < today -> disabled */}
+            <button type="button" class="btn btn-danger" onClick={e => onClickCancel(reservation)}>Cancel Reservation</button>
           </div>
         </div>
       )}
     </>
   );
+}
+
+function formatDate(date) {
+  var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2)
+    month = '0' + month;
+  if (day.length < 2)
+    day = '0' + day;
+
+  return [day, month, year].join('/');
 }
