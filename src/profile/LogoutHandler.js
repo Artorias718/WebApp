@@ -6,12 +6,15 @@ import axios from "axios";
 
 export default function LogoutHandler() {
 
+    const utentiPort = '8080';
+    const kubePort = '9000';
+    const baseURL = 'http://localhost:' + kubePort
     localStorage.clear();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await axios('http://localhost:8080/logout',
+                const result = await axios(baseURL + '/logout',
                     { withCredentials: true },
                     {
                         headers: {

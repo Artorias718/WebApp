@@ -31,6 +31,13 @@ export default function Mappa() {
 
   let stabName = '';
 
+  const stabilimentiPort = '8080';
+  const bookingPort = '7500';
+  const kubePort = '9000';
+  
+  const stabilimentiBaseURL = 'http://localhost:' + kubePort + '/api';
+  const bookingBaseURL = 'http://localhost:' + kubePort + '/api';
+
   /* {
         "id": 6,
         "price": 50.99,
@@ -45,7 +52,7 @@ export default function Mappa() {
     console.log('runned useEffect');
     const fecthStabilimentoData = async (id) => {
       try {
-        const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + id);
+        const result = await axios(stabilimentiBaseURL + '/v1/stabilimenti/' + id);
 
         setStabilimento(result.data);
 
@@ -60,7 +67,7 @@ export default function Mappa() {
       try {
         let selectedDate = formatDate(mydate);
         console.log(selectedDate);
-        const result = await axios('http://localhost:8080/api/v1/stabilimenti/' + stabilimentoId + '/lista_Posti/' + selectedDate);
+        const result = await axios(stabilimentiBaseURL + '/v1/stabilimenti/' + stabilimentoId + '/lista_Posti/' + selectedDate);
 
         setSeat(result.data);
         setSeatAvailable(result.data.filter(s => s.booked === false));
@@ -138,7 +145,7 @@ export default function Mappa() {
       // if (window.confirm(msg)) {
         // alert("exit.html", "Thanks for Visiting!");
         // faccio la post con stabilimentoId, reservedSeatsId, totalPrice
-      axios.post('http://localhost:7500/api/v2/prenotazioni/create', {
+      axios.post(bookingBaseURL + '/v2/prenotazioni/create', {
         "stabilimentoID": stabilimentoId,
         "listaPostiPrenotati": reservedIds,
         "totalPrice": totalPrice,

@@ -1,4 +1,6 @@
-export const API_BASE_URL = 'http://localhost:8080';
+const utentiPort = '8080';
+const kubePort = '9000';
+export const API_BASE_URL = 'http://localhost:' + kubePort;
 export const ACCESS_TOKEN = 'accessToken';
 
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'

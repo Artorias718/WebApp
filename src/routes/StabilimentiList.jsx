@@ -29,12 +29,16 @@ export default function Stabilimenti() {
 
   const API_KEY = 'AIzaSyAk5gXXtzL3bDr--V7jI71K42Bb1Yp7fwY'
 
+  const stabilimentiPort = '8080';
+  const kubePort = '9000';
+  const baseURL = 'http://localhost:' + kubePort + '/api';
+
   useEffect(() => {
     // console.log('runned useEffect stabilimentiList');
     const fetchData = async () => {
 
       try {
-        const result = await axios('http://localhost:8080/api/v1/stabilimenti/');
+        const result = await axios(baseURL + '/v1/stabilimenti/');
 
         setStabilimenti(result.data);
       } catch (error) {

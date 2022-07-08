@@ -6,7 +6,11 @@ import axios from 'axios';
 import {authContext} from "../App";
 
 export default function Profile() {
-  const bookingBaseURL = 'http://localhost:7500/api';
+
+  const bookingPort = '7500';
+  const kubePort = '9000';
+  const bookingBaseURL = 'http://localhost:' + kubePort + '/api';
+  
   let userEmail = localStorage.email;
 
   const [reservationList, setReservationList] = useState([]);

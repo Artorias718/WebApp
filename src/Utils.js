@@ -3,10 +3,14 @@ import axios from "axios";
 
 export function GetCurrentUser() {
 
+    const utentiPort = '8080';
+    const kubePort = '9000';
+    const baseURL = 'http://localhost:' + kubePort + '/api'
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await axios.get('http://localhost:8080/api/v1/user/me',
+                const result = await axios.get(baseURL + '/v1/user/me',
                     { withCredentials: true },
                     {
                         headers: {
