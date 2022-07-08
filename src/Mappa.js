@@ -132,30 +132,30 @@ export default function Mappa() {
       console.log(mydate);
 
       // qua sarebbe interessante un modal o una pagina a parte per il checkout
-      let msg = 'Conferma la prenotazione dei posti: ' +
-        seatReserved.map(s => '\n\tPosto: ' + s.id + ' - prezzo: € ' + s.price) +
-        '\nPrezzo totale: €' + totalPrice;
-      if (window.confirm(msg)) {
+      // let msg = 'Conferma la prenotazione dei posti: ' +
+      //   seatReserved.map(s => '\n\tPosto: ' + s.id + ' - prezzo: € ' + s.price) +
+      //   '\nPrezzo totale: €' + totalPrice;
+      // if (window.confirm(msg)) {
         // alert("exit.html", "Thanks for Visiting!");
         // faccio la post con stabilimentoId, reservedSeatsId, totalPrice
-        axios.post('http://localhost:7500/api/v2/prenotazioni/create', {
-          "stabilimentoID": stabilimentoId,
-          "listaPostiPrenotati": reservedIds,
-          "totalPrice": totalPrice,
-          "date": formatDate(mydate),
-          "userEmail": userEmail
+      axios.post('http://localhost:7500/api/v2/prenotazioni/create', {
+        "stabilimentoID": stabilimentoId,
+        "listaPostiPrenotati": reservedIds,
+        "totalPrice": totalPrice,
+        "date": formatDate(mydate),
+        "userEmail": userEmail
+      })
+        .then(function (response) {
+          console.log(response);
+          alert("Prenotazione andata a buon fine");
+          sessionStorage.setItem('selectedDate', new Date());
+          navigate("/stabilimenti" + location.search);
         })
-          .then(function (response) {
-            console.log(response);
-            alert("Prenotazione andata a buon fine");
-            sessionStorage.setItem('selectedDate', new Date());
-            navigate("/stabilimenti" + location.search);
-          })
-          .catch(function (error) {
-            console.log(error);
-            alert(error);
-          });
-      }
+        .catch(function (error) {
+          console.log(error);
+          alert(error);
+        });
+      // }
     }
     else {
       alert('Realizzare il login per poter prenotare!');
