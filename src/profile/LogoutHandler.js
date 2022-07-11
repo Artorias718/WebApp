@@ -8,7 +8,7 @@ export default function LogoutHandler() {
 
     const utentiPort = '8080';
     const kubePort = '9000';
-    const baseURL = 'http://localhost:' + kubePort
+    const baseURL = 'http://localhost:' + utentiPort
     localStorage.clear();
 
     useEffect(() => {
