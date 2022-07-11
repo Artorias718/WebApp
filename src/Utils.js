@@ -4,8 +4,8 @@ import axios from "axios";
 export function GetCurrentUser() {
 
     const utentiPort = '8080';
-    const kubePort = '9000';
-    const baseURL = 'http://localhost:' + kubePort + '/api'
+    const gatewayPort = '9000';
+    const baseURL = 'http://localhost:' + utentiPort + '/api'
 
     useEffect(() => {
         const fetchData = async () => {

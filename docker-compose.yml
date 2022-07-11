@@ -1,0 +1,15 @@
+version: "3.3"
+
+services:
+  fe:
+    container_name: fe
+    image: fe-dev
+    build:
+      context: .
+    ports:
+      - 3000:3000
+
+networks:
+  default:
+    external:
+      name: front_default
