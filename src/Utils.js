@@ -5,7 +5,7 @@ export function GetCurrentUser() {
 
     const utentiPort = '8080';
     const gatewayPort = '9000';
-    const baseURL = 'http://localhost:' + utentiPort + '/api'
+    const baseURL = 'http://localhost:' + gatewayPort + '/api'
 
     useEffect(() => {
         const fetchData = async () => {
